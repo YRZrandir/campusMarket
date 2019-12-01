@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
@@ -13,26 +14,32 @@
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
+	<mvc:annotation-driven />
+	<mvc:default-servlet-handler />
 	<context:component-scan base-package="controller"></context:component-scan>
 	
-
-	<bean id="dataSource" 
+	
+	<bean id="dataSource" name="dataSource"
       	class="org.springframework.jdbc.datasource.DriverManagerDataSource">
       	<property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
-      	<property name="url" value="jdbc:mysql://localhost:3306/market?serverTimezone=UTC"/>
-      	<property name="username" value="admin"/>
-      	<property name="password" value="2017303"/>
+      	<property name="url" value="jdbc:mysql://127.0.0.1:3306/campusMarket?serverTimezone=UTC"/>
+      	<property name="username" value="root"/>
+      	<property name="password" value="798245456"/>
 	</bean>
 
-	<mvc:resources mapping="/*.html" location="/"></mvc:resources>
-   	<bean id="UserJDBCTemplate" class="model.user.UserJDBCTemplate">
+	
+   	<bean id="UserJDBCTemplate" name="UserJDBCTemplate" class="model.user.UserJDBCTemplate">
       	<property name="dataSource" ref="dataSource" />    
    	</bean>
-   	
-   	<bean id="ProductJDBCTemplate" class="model.product.ProductJDBCTemplate">
+   	<bean id="ProductJDBCTemplate" name="ProductJDBCTemplate" class="model.product.ProductJDBCTemplate">
    		<property name="dataSource" ref="dataSource" />
    	</bean>
-
-	<mvc:annotation-driven />
-    <mvc:default-servlet-handler />
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize">
+			<value>999999</value>
+		</property>
+		<property name="defaultEncoding">
+			<value>UTF-8</value>
+		</property>
+	</bean>
 </beans>

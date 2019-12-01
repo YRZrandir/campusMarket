@@ -27,7 +27,7 @@ public interface ProductDAO {
 	 * Return newly added product
 	 */
 	public Product addProduct(String name, String userId, String price,
-			String time, String description, String iconPath);
+			String time, String description, String iconPath, String directory);
 	
 	/**
 	 * @return
@@ -41,7 +41,7 @@ public interface ProductDAO {
 	 * Return newly updated product
 	 */
 	public Product updateProduct(String id, String name, String userId, String price,
-			String time, String description, String iconPath);
+			String time, String description, String iconPath, String directory);
 	
 	/**
 	 * Search by product name and position (school&campus);
@@ -51,5 +51,5 @@ public interface ProductDAO {
 	 * Return an ArrayList<Product> containing all results;
 	 * If no result find, return empty ArrayList<Product> instead of null
 	 */
-	public ArrayList<Product> searchProduct(String name, String school, String campus);
+	public ArrayList<Product> searchProduct(String name, String school, String campus, String directory);
 }

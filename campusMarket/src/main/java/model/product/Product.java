@@ -16,12 +16,13 @@ public class Product {
 	private String description;//不超过255
 	private String iconPath;//不超过255
 	private String status;
+	private String directory;
 	
 	public Product() {
 
 	}
 	public Product(String id, String name, String userId, String price, String time, String description,
-			String iconPath, String status) {
+			String iconPath, String status, String directory) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -31,6 +32,7 @@ public class Product {
 		this.description = description;
 		this.iconPath = iconPath;
 		this.status = status;
+		this.directory = directory;
 	}
 	
 	public String getId() {
@@ -82,6 +84,12 @@ public class Product {
 		this.status = status;
 	}
 	
+	public String getDirectory() {
+		return directory;
+	}
+	public void setDirectory(String directory) {
+		this.directory = directory;
+	}
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", name=" + name + ", userId=" + userId + ", price=" + price

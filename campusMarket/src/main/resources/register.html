@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<title>Register</title>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+<div>
+	<form id="registerForm">
+		id:<input type="text" name="id" value="123456">
+		name:<input type="text" name="name" value="小明">
+		password:<input type="password" name="password">
+		gender:<select name="gender">
+		<option value="male" selected="selected">男</option>
+		<option value="female">女</option>
+		</select>
+		school:<input type="text" name="school" value="山东大学">
+		campus:<input type="text" name="campus" value="软件园">
+		telephone:<input type="text" name="telephone" value="111">
+		头像：<input type="file" name="file">
+		
+		<input type="button" id="registerButton" value="Register">
+	</form>
+	<script>
+		$("#registerButton").click(function() {
+			var form = new FormData(document.getElementById("registerForm"))
+			$.ajax({
+				url:"/campusMarket/register",
+				type:"post",
+				data:form,
+				processData:false,
+				contentType:false,
+				success:function(ret) {
+					alert("success")
+				},
+				error: function(ret) {
+					alert("error")
+				}
+			})
+		})
+	</script>
+</div>
+
+</body></html>
