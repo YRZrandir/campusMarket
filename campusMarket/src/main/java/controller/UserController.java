@@ -5,24 +5,18 @@ package controller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.stereotype.Controller;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import model.user.*;
 import tools.*;
@@ -34,7 +28,6 @@ import tools.*;
 @Controller
 public class UserController {
 	private ApplicationContext context;
-	private static final Log logger = LogFactory.getLog(UserController.class);
 	
 	@CrossOrigin	(origins = "*")
 	@RequestMapping	(value="/login", method=RequestMethod.POST)
@@ -53,9 +46,6 @@ public class UserController {
 			User user = userDAO.getUserByIdAndPassword(id, password);
 			HttpTools.writeJSON(response, user.toString());
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			HttpTools.writeJSON(response, "fail");
-		} catch (IOException e) {
 			e.printStackTrace();
 			HttpTools.writeJSON(response, "fail");
 		}

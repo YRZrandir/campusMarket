@@ -3,7 +3,6 @@
  */
 package controller;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
@@ -11,19 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.stereotype.Controller;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
+import com.alibaba.fastjson.JSONObject;
 import model.product.*;
 import tools.*;
 /**
@@ -40,21 +33,43 @@ public class ProductController {
 			@RequestParam("files")		MultipartFile[] files,
 			@RequestParam("name")		String name,
 			@RequestParam("userId")		String userId,
+			@RequestParam("price")		String price,
 			@RequestParam("time")		String time,
 			@RequestParam("description")String description,
 			@RequestParam("directory")	String directory,
-										HttpServletResponse response) {
-		
-		
+										HttpServletResponse response,
+										HttpServletRequest  request) {
+		response.setCharacterEncoding("UTF-8");
+		context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
+		ProductDAO productDAO = context.getBean("ProductJDBCTemplate", ProductJDBCTemplate.class);
+		String imgPath = request.getServletContext().getRealPath("/ProductImage/");
+		String iconPath = "";
+		int count = 1;
+		for(MultipartFile file : files) {
+			String temp = ImageTools.saveImage(file, name + "_" + time + "_" + count + file.getOriginalFilename(), imgPath);
+			iconPath += "#" + temp;
+			count++;
+			//#Path1#Path2#Path3...
+		}
+		Product newProduct = productDAO.addProduct(name, userId, price, time, description, iconPath, directory);
+		HttpTools.writeJSON(response, newProduct.toString());
 	}
 	
 	@RequestMapping(value="deleteProduct", method=RequestMethod.POST)
 	@ResponseBody
 	public void deleteProduct(@RequestParam("id")String id, HttpServletResponse response) {
-		
+		response.setCharacterEncoding("UTF-8");
+		context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
+		ProductDAO productDAO = context.getBean("ProductJDBCTemplate", ProductJDBCTemplate.class);
+		boolean ret = productDAO.deleteProduct(id);
+		if(ret) {
+			HttpTools.writeJSON(response, "success");
+		} else {
+			HttpTools.writeJSON(response, "fail");
+		}
 	}
 	
-	@RequestMapping(value="deleteProduct", method=RequestMethod.POST)
+	@RequestMapping(value="searchProduct", method=RequestMethod.POST)
 	@ResponseBody
 	public void searchProduct(
 			@RequestParam("name")		String name,
@@ -62,19 +77,49 @@ public class ProductController {
 			@RequestParam("campus")		String campus,
 			@RequestParam("directory")	String directory,
 										HttpServletResponse	response) {
-		
+		response.setCharacterEncoding("UTF-8");
+		context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
+		ProductDAO productDAO = context.getBean("ProductJDBCTemplate", ProductJDBCTemplate.class);
+		ArrayList<Product> results = productDAO.searchProduct(name, school, campus, directory);
+		String result = JSONObject.toJSON(results).toString();
+		HttpTools.writeJSON(response, result);
 	}
 	
-	@RequestMapping(value="deleteProduct", method=RequestMethod.POST)
+	@RequestMapping(value="updateProduct", method=RequestMethod.POST)
 	@ResponseBody
 	public void updateProduct(
 			@RequestParam("files")		MultipartFile[] files,
 			@RequestParam("id")			String id,
 			@RequestParam("name")		String name,
+			@RequestParam("userId")		String userId,
+			@RequestParam("price")		String price,
 			@RequestParam("time")		String time,
 			@RequestParam("description")String description,
 			@RequestParam("directory")	String directory,
-										HttpServletResponse response) {
-			
+										HttpServletResponse response,
+										HttpServletRequest	request) {
+		try {
+			response.setCharacterEncoding("UTF-8");
+			request.setCharacterEncoding("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+		context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
+		ProductDAO productDAO = context.getBean("ProductJDBCTemplate", ProductJDBCTemplate.class);
+		if(files != null && files.length > 0)
+		{
+			String imgPath = request.getServletContext().getRealPath("/ProductImage/");
+			String iconPath = "";
+			int count = 1;
+			for(MultipartFile file : files) {
+				String temp = ImageTools.saveImage(file, name + "_" + time + "_" + count + file.getOriginalFilename(), imgPath);
+				iconPath += "#" + temp;
+				count++;
+				//#Path1#Path2#Path3...
+			}
+			Product newProduct = productDAO.updateProduct(id, name, userId, price, time, description, iconPath, directory);
+			HttpTools.writeJSON(response, newProduct.toString());
+		}
 	}
 }

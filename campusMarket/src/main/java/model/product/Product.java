@@ -93,7 +93,8 @@ public class Product {
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", name=" + name + ", userId=" + userId + ", price=" + price
-				+ ", time=" + time + ", description=" + description + ", iconPath=" + iconPath + "]";
+				+ ", time=" + time + ", description=" + description + ", iconPath=" + iconPath 
+				+ ", status=" + status + ", directory=" + directory + "]";
 	}
 	
 }
