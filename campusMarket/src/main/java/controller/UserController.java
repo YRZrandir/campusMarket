@@ -36,39 +36,45 @@ public class UserController {
 	private ApplicationContext context;
 	private static final Log logger = LogFactory.getLog(UserController.class);
 	
-	@RequestMapping(value="/login", method=RequestMethod.POST)
+	@CrossOrigin	(origins = "*")
+	@RequestMapping	(value="/login", method=RequestMethod.POST)
 	@ResponseBody
-	public void login(HttpServletRequest request, HttpServletResponse response) {
+	public void login(
+			@RequestParam("id")			String id,
+			@RequestParam("password")	String password,
+										HttpServletRequest request,
+										HttpServletResponse response) {
 		try {
 			request.setCharacterEncoding("UTF-8");
 			response.setCharacterEncoding("UTF-8");
-			String id = (String)request.getParameter("id");
-			String password = (String)request.getParameter("password");
-			context = new ClassPathXmlApplicationContext("Beans.xml");
+			context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
 			UserDAO userDAO = context.getBean("UserJDBCTemplate", UserJDBCTemplate.class);
-
+			
+			User user = userDAO.getUserByIdAndPassword(id, password);
+			HttpTools.writeJSON(response, user.toString());
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
+			HttpTools.writeJSON(response, "fail");
 		} catch (IOException e) {
 			e.printStackTrace();
+			HttpTools.writeJSON(response, "fail");
 		}
 	}
 	
-	@CrossOrigin(origins = "*")
-	@RequestMapping(value="/register", method=RequestMethod.POST)
+	@CrossOrigin	(origins = "*")
+	@RequestMapping	(value="/register", method=RequestMethod.POST)
 	@ResponseBody
 	public void register(
-			@RequestParam("file")MultipartFile file,
-			@RequestParam("id")String id,
-			@RequestParam("name")String name,
-			@RequestParam("password")String password,
-			@RequestParam("gender")String gender,
-			@RequestParam("school")String school,
-			@RequestParam("campus")String campus,
-			@RequestParam("telephone")String telephone,
-			HttpServletRequest request,
-			HttpServletResponse response)
-	{
+			@RequestParam("file")		MultipartFile file,
+			@RequestParam("id")			String id,
+			@RequestParam("name")		String name,
+			@RequestParam("password")	String password,
+			@RequestParam("gender")		String gender,
+			@RequestParam("school")		String school,
+			@RequestParam("campus")		String campus,
+			@RequestParam("telephone")	String telephone,
+										HttpServletRequest request,
+										HttpServletResponse response) {
 		try {
 			request.setCharacterEncoding("UTF-8");
 			response.setCharacterEncoding("UTF-8");
@@ -80,19 +86,44 @@ public class UserController {
 			String iconPath = ImageTools.saveImage(file, id + "_" + file.getOriginalFilename(), path);
 
 			context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
-			System.out.println(context.getBeanDefinitionCount());
-
 			UserDAO userDAO = context.getBean("UserJDBCTemplate", UserJDBCTemplate.class);
+			
 			User newUser = userDAO.addUser(id, name, password, gender, school, campus, iconPath, telephone);
-			System.out.println(newUser);
-			response.getWriter().println("Success");
+			HttpTools.writeJSON(response, newUser.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
+			HttpTools.writeJSON(response, "fail");
 		}
 	}
 	
-	@RequestMapping(value="/updateUser", method=RequestMethod.POST)
-	public void updateUser(MultipartFile file, HttpServletRequest request, HttpServletResponse response) {
-		
+	@CrossOrigin	(origins = "*")
+	@RequestMapping	(value="/updateUser", method=RequestMethod.POST)
+	@ResponseBody
+	public void updateUser(
+			@RequestParam("file")		MultipartFile file,
+			@RequestParam("id")			String id,
+			@RequestParam("name")		String name,
+			@RequestParam("password")	String password,
+			@RequestParam("gender")		String gender,
+			@RequestParam("school")		String school,
+			@RequestParam("campus")		String campus,
+			@RequestParam("telephone")	String telephone,
+										HttpServletRequest request,
+										HttpServletResponse response) {
+		try {
+			request.setCharacterEncoding("UTF-8");
+			response.setCharacterEncoding("UTF-8");
+			String path = request.getServletContext().getRealPath("/Image/");
+			String iconPath = ImageTools.saveImage(file, id + "_" + file.getOriginalFilename(), path);
+
+			context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
+			UserDAO userDAO = context.getBean("UserJDBCTemplate", UserJDBCTemplate.class);
+			
+			User newUser = userDAO.updateUser(id, name, password, gender, school, campus, iconPath, telephone);
+			HttpTools.writeJSON(response, newUser.toString());
+		} catch(IOException e) {
+			e.printStackTrace();
+			HttpTools.writeJSON(response, "fail");
+		}
 	}
 }
