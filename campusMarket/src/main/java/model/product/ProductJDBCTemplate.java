@@ -44,7 +44,7 @@ public class ProductJDBCTemplate implements ProductDAO {
 
 	@Override
 	public Product addProduct(String name, String userId, String price, String time, String description,
-			String iconPath) {
+			String iconPath, String directory) {
 		// TODO Auto-generated method stub
 		String sql="insert into Product(pname,uid,price,time,description,iconPath) values (?,?,?,?,?,?)";
 		GeneratedKeyHolder keyHolder=new GeneratedKeyHolder();
@@ -91,7 +91,7 @@ public class ProductJDBCTemplate implements ProductDAO {
 
 	@Override
 	public Product updateProduct(String id, String name, String userId, String price, String time, String description,
-			String iconPath) {
+			String iconPath, String directory) {
 		// TODO Auto-generated method stub
 		String sql="update Product set (pname,uid,price,time,description,iconPath) = (?,?,?,?,?,?) where pid="+id;
 
@@ -123,7 +123,7 @@ public class ProductJDBCTemplate implements ProductDAO {
 	}
 
 	@Override
-	public ArrayList<Product> searchProduct(String name, String school, String campus) {
+	public ArrayList<Product> searchProduct(String name, String school, String campus, String directory) {
 		// TODO Auto-generated method stub
 		String sql="select * from Product natural join user where pname='"+name+"'"+"and school ='"+school+"' and campus ='"+campus+"'";
 
