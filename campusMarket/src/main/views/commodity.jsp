@@ -87,12 +87,32 @@
             </div>
 
             <div class="cont-list layui-clear" id="list-cont">
+<%! int pn=0;%>
 <%
 	ArrayList<Product> p=(ArrayList<Product>)session.getAttribute("product");
-
+	pn=p.size();
 	for(int i=0;i<p.size();i++)
 	{
-		out.println("<h3>"+p.toString()+"</h3>");
+		out.println(
+				"<div class=\"item\">"
+				
+	               + "<div class=\"img\">"
+	        			+"<a href=\"javascript:;\"><img src=\"ProductImage/timg8.jpg\" style=\"width:280px\"></a>"
+	      			+"</div>"
+	      			
+				      +"<div class=\"text\">"
+				      
+				        +"<p class=\"title\">"+p.get(i).getName()+"</p>"
+				        
+				        +"<p class=\"price\">"
+				        
+				         +"<span class=\"pri\">￥"+p.get(i).getPrice()+"</span>" 
+				         
+				        +"</p>"
+				        
+				      +"</div>"
+				      
+    			+"</div>");
 	}
 
 %>
@@ -142,7 +162,7 @@
      mm = layui.mm;
        laypage.render({
         elem: 'demo0'
-        ,count: 2 //数据总数
+        ,count: <%=pn%> //数据总数
       });
 
 
