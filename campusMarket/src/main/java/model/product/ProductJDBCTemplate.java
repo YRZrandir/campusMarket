@@ -46,7 +46,8 @@ public class ProductJDBCTemplate implements ProductDAO {
 	public Product addProduct(String name, String userId, String price, String time, String description,
 			String iconPath, String directory) {
 		// TODO Auto-generated method stub
-		String sql="insert into Product(pname,uid,price,time,description,iconPath) values (?,?,?,?,?,?)";
+		String sql="insert into Product(name, userId, price, time, description, iconPath, status, directory) "
+				+ " values (?,?,?,?,?,?,?,?)";
 		GeneratedKeyHolder keyHolder=new GeneratedKeyHolder();
 		jdbcTemplateObject.update(new PreparedStatementCreator() {
 
@@ -60,6 +61,8 @@ public class ProductJDBCTemplate implements ProductDAO {
 				pst.setString(4, time);
 				pst.setString(5, description);
 				pst.setString(6, iconPath);
+				pst.setString(7, "normal");
+				pst.setString(8, directory);
 				return pst;
 			}
 			
@@ -67,6 +70,8 @@ public class ProductJDBCTemplate implements ProductDAO {
 				keyHolder);		
 		Product p=new Product();
 		p.setDescription(description);
+		p.setDirectory(directory);
+		p.setStatus("normal");
 		p.setIconPath(iconPath);
 		p.setName(name);
 		p.setTime(time);

@@ -30,7 +30,7 @@ public class ProductController {
 	@RequestMapping(value="/addProduct", method=RequestMethod.POST)
 	@ResponseBody
 	public void addProduct(
-			@RequestParam("files")		MultipartFile[] files,
+			@RequestParam("file")		MultipartFile[] files,
 			@RequestParam("name")		String name,
 			@RequestParam("userId")		String userId,
 			@RequestParam("price")		String price,
@@ -46,7 +46,8 @@ public class ProductController {
 		String iconPath = "";
 		int count = 1;
 		for(MultipartFile file : files) {
-			String temp = ImageTools.saveImage(file, name + "_" + time + "_" + count + file.getOriginalFilename(), imgPath);
+			String temp = ImageTools.saveImage(file,
+					name + "_" + time.replace(" ", "").replace(",", "").replace(":", "") + "_" + count + file.getOriginalFilename(), imgPath);
 			iconPath += "#" + temp;
 			count++;
 			//#Path1#Path2#Path3...
@@ -88,7 +89,7 @@ public class ProductController {
 	@RequestMapping(value="updateProduct", method=RequestMethod.POST)
 	@ResponseBody
 	public void updateProduct(
-			@RequestParam("files")		MultipartFile[] files,
+			@RequestParam("file")		MultipartFile[] files,
 			@RequestParam("id")			String id,
 			@RequestParam("name")		String name,
 			@RequestParam("userId")		String userId,
