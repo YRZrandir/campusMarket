@@ -56,14 +56,14 @@ public class UserJDBCTemplate implements UserDAO {
 					u.setName(rs.getString("uname"));
 					u.setPassword(rs.getString("password"));
 					u.setSchool(rs.getString("school"));
-					
-					
-					
 					return u;
 				}
-				
 				});
-		return list.get(0);
+		if(list.isEmpty()) {
+			return null;
+		} else {
+			return list.get(0);
+		}
 	}
 
 	@Override
@@ -90,23 +90,15 @@ public class UserJDBCTemplate implements UserDAO {
 			}
 			
 		});
-		User u=new User();
-		u.setCampus(campus);
-		u.setGender(gender);
-		u.setIconPath(iconPath);
-		u.setPassword(password);
-		u.setSchool(school);
-		u.setName(name);
-		u.setId(id);
-		u.setTelephone(telephone);
-		return u;
+		return new User(id, name, password, gender, school, campus, iconPath, telephone);
 	}
 
 	@Override
 	public User updateUser(String id, String name, String password, String gender, String school, String campus,
 			String iconPath, String telephone) {
 		// TODO Auto-generated method stub
-		String sql="update user set (uname,password,gender,school,campus,iconPath) = (?,?,?,?,?,?) where uid='"+id+"'";
+		String sql="update user set (name, password, gender, school, campus, iconPath, telephone) = (?,?,?,?,?,?,?)"
+				+ " where uid='"+id+"'";
 
 		jdbcTemplateObject.update(new PreparedStatementCreator() {
 
@@ -122,17 +114,8 @@ public class UserJDBCTemplate implements UserDAO {
 				pst.setString(6, iconPath);
 				return pst;
 			}
-			
 		});		
-		User u=new User();
-		u.setCampus(campus);
-		u.setGender(gender);
-		u.setIconPath(iconPath);
-		u.setPassword(password);
-		u.setSchool(school);
-		u.setName(name);
-		u.setId(id);
-		return u;
+		return new User(id, name, password, gender, school, campus, iconPath, telephone);
 	}
 
 }

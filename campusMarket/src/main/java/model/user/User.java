@@ -13,6 +13,16 @@ public class User {
 	public User() {
 		
 	}
+	/**
+	 * @param id
+	 * @param name
+	 * @param password
+	 * @param gender
+	 * @param school
+	 * @param campus
+	 * @param iconPath
+	 * @param telephone
+	 */
 	public User(String id, String name, String password, String gender, String school, String campus, String iconPath,
 			String telephone) {
 		super();

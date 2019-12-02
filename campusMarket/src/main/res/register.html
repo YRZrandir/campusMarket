@@ -23,6 +23,7 @@
 		<input type="button" id="registerButton" value="Register">
 	</form>
 	<script>
+		var user;
 		$("#registerButton").click(function() {
 			var form = new FormData(document.getElementById("registerForm"))
 			$.ajax({
@@ -32,7 +33,8 @@
 				processData:false,
 				contentType:false,
 				success:function(ret) {
-					alert("success")
+					user = $.parseJSON(ret);
+					console.log(user["id"]);
 				},
 				error: function(ret) {
 					alert("error")

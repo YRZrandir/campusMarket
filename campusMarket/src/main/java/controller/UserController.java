@@ -29,6 +29,37 @@ import tools.*;
 public class UserController {
 	private ApplicationContext context;
 	
+	@RequestMapping(value="/loginPage")
+	public String loginPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		return "login";
+	}
+	@RequestMapping(value="/indexPage")
+	public String indexPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+		return "index";
+	}
+	@RequestMapping(value="/registerPage")
+	public String registerPage(HttpServletRequest request, HttpServletResponse response) {
+		
+		return "register";
+	}
+	@RequestMapping(value="/managePage")
+	public String managePage(HttpServletRequest request, HttpServletResponse response) {
+		
+		return "manage";
+	}
+	@RequestMapping(value="/aboutPage")
+	public String aboutPage(HttpServletRequest request, HttpServletResponse response) {
+		
+		return "about";
+	}
+	@RequestMapping(value="/commodityPage")
+	public String commodityPage(HttpServletRequest request, HttpServletResponse response) {
+		
+		return "commodity";
+	}
+	
+	
 	@CrossOrigin	(origins = "*")
 	@RequestMapping	(value="/login", method=RequestMethod.POST)
 	@ResponseBody
@@ -44,7 +75,11 @@ public class UserController {
 			UserDAO userDAO = context.getBean("UserJDBCTemplate", UserJDBCTemplate.class);
 			
 			User user = userDAO.getUserByIdAndPassword(id, password);
-			HttpTools.writeJSON(response, user.toString());
+			if(user != null) {
+				HttpTools.writeObject(response, user);
+			} else {
+				HttpTools.writeJSON(response, "fail");
+			}
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 			HttpTools.writeJSON(response, "fail");
@@ -71,15 +106,17 @@ public class UserController {
 			System.out.println("image name : " + file.getOriginalFilename());
 			System.out.println("RegisterInfo : " + id + " " + 
 			name + " " + password + " " + gender + " " + school + " " + campus + " " + telephone);
-			
-			String path = request.getServletContext().getRealPath("/Image/");
-			String iconPath = ImageTools.saveImage(file, id + "_" + file.getOriginalFilename(), path);
-
+			String iconPath = "";
+			if(file != null) {
+				String path = request.getServletContext().getRealPath("/Image/");
+				iconPath = id + "_" + file.getOriginalFilename();
+				ImageTools.saveImage(file, iconPath, path);
+			}
 			context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
 			UserDAO userDAO = context.getBean("UserJDBCTemplate", UserJDBCTemplate.class);
 			
 			User newUser = userDAO.addUser(id, name, password, gender, school, campus, iconPath, telephone);
-			HttpTools.writeJSON(response, newUser.toString());
+			HttpTools.writeObject(response, newUser);
 		} catch (IOException e) {
 			e.printStackTrace();
 			HttpTools.writeJSON(response, "fail");
@@ -103,14 +140,18 @@ public class UserController {
 		try {
 			request.setCharacterEncoding("UTF-8");
 			response.setCharacterEncoding("UTF-8");
-			String path = request.getServletContext().getRealPath("/Image/");
-			String iconPath = ImageTools.saveImage(file, id + "_" + file.getOriginalFilename(), path);
+			String iconPath = "";
+			if(file != null) {
+				String path = request.getServletContext().getRealPath("/Image/");
+				iconPath = id + "_" + file.getOriginalFilename();
+				ImageTools.saveImage(file, iconPath, path);
+			}
 
 			context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
 			UserDAO userDAO = context.getBean("UserJDBCTemplate", UserJDBCTemplate.class);
 			
 			User newUser = userDAO.updateUser(id, name, password, gender, school, campus, iconPath, telephone);
-			HttpTools.writeJSON(response, newUser.toString());
+			HttpTools.writeObject(response, newUser);
 		} catch(IOException e) {
 			e.printStackTrace();
 			HttpTools.writeJSON(response, "fail");

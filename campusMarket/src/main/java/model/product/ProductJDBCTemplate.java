@@ -25,6 +25,8 @@ public class ProductJDBCTemplate implements ProductDAO {
 
 	@Autowired
 	private DriverManagerDataSource dataSource;
+	private JdbcTemplate jdbcTemplateObject;
+	
 	public DriverManagerDataSource getDataSource() {
 		return dataSource;
 	}
@@ -32,16 +34,13 @@ public class ProductJDBCTemplate implements ProductDAO {
 		this.dataSource = dataSource;
 		jdbcTemplateObject = new JdbcTemplate(dataSource);
 	}
-	//Auto injected, no need to initalize
 	public JdbcTemplate getJdbcTemplateObject() {
 		return jdbcTemplateObject;
 	}
 	public void setJdbcTemplateObject(JdbcTemplate jdbcTemplateObject) {
 		this.jdbcTemplateObject = jdbcTemplateObject;
 	}
-
-	private JdbcTemplate jdbcTemplateObject;
-
+	
 	@Override
 	public Product addProduct(String name, String userId, String price, String time, String description,
 			String iconPath, String directory) {
@@ -65,20 +64,14 @@ public class ProductJDBCTemplate implements ProductDAO {
 				pst.setString(8, directory);
 				return pst;
 			}
-			
-		},
-				keyHolder);		
-		Product p=new Product();
-		p.setDescription(description);
-		p.setDirectory(directory);
-		p.setStatus("normal");
-		p.setIconPath(iconPath);
-		p.setName(name);
-		p.setTime(time);
-		p.setUserId(userId);
-		p.setPrice(price);
-		p.setId(keyHolder.getKey().toString());
-		return p;
+		},keyHolder);
+		
+		String id = keyHolder.getKey().toString();
+		if(id == null) {
+			return null;
+		} else {
+			return new Product(id, name, userId, price, time, description, iconPath, "normal", directory);
+		}
 	}
 
 	@Override
@@ -149,7 +142,6 @@ public class ProductJDBCTemplate implements ProductDAO {
 					
 					return p;
 				}
-				
 				});
 		return list;
 	}

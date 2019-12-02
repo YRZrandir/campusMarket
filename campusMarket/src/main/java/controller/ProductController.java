@@ -46,14 +46,15 @@ public class ProductController {
 		String iconPath = "";
 		int count = 1;
 		for(MultipartFile file : files) {
-			String temp = ImageTools.saveImage(file,
-					name + "_" + time.replace(" ", "").replace(",", "").replace(":", "") + "_" + count + file.getOriginalFilename(), imgPath);
-			iconPath += "#" + temp;
+			String fileName = name + "_" + time.replace(" ", "").replace(",", "").replace(":", "") + 
+					"_" + count + file.getOriginalFilename();
+			ImageTools.saveImage(file, fileName, imgPath);
+			iconPath += "#" + fileName;
 			count++;
 			//#Path1#Path2#Path3...
 		}
 		Product newProduct = productDAO.addProduct(name, userId, price, time, description, iconPath, directory);
-		HttpTools.writeJSON(response, newProduct.toString());
+		HttpTools.writeObject(response, newProduct);
 	}
 	
 	@RequestMapping(value="deleteProduct", method=RequestMethod.POST)
@@ -82,8 +83,12 @@ public class ProductController {
 		context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
 		ProductDAO productDAO = context.getBean("ProductJDBCTemplate", ProductJDBCTemplate.class);
 		ArrayList<Product> results = productDAO.searchProduct(name, school, campus, directory);
-		String result = JSONObject.toJSON(results).toString();
-		HttpTools.writeJSON(response, result);
+		if(results != null) {
+			HttpTools.writeObject(response, results);
+		} else {
+			HttpTools.writeJSON(response, "fail");
+		}
+		
 	}
 	
 	@RequestMapping(value="updateProduct", method=RequestMethod.POST)
@@ -120,7 +125,11 @@ public class ProductController {
 				//#Path1#Path2#Path3...
 			}
 			Product newProduct = productDAO.updateProduct(id, name, userId, price, time, description, iconPath, directory);
-			HttpTools.writeJSON(response, newProduct.toString());
+			if(newProduct != null) {
+				HttpTools.writeObject(response, newProduct);
+			} else {
+				HttpTools.writeJSON(response, "fail");
+			}
 		}
 	}
 }
