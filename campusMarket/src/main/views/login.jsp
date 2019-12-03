@@ -4,10 +4,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Document</title>
+  <title>校园小拍 登录</title>
   <link rel="stylesheet" type="text/css" href="res/static/css/main.css">
   <link rel="stylesheet" type="text/css" href="res/layui/css/layui.css">
   <script type="text/javascript" src="res/layui/layui.js"></script>
+  <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
 </head>
@@ -56,29 +57,54 @@
     <div class="login-bg">
       <div class="login-cont w1200">
         <div class="form-box">
-          <form class="layui-form" action="login" method="POST">
+          <form class="layui-form" id="loginForm" method="post">
             <legend>登录</legend>
             <div class="layui-form-item">
               <div class="layui-inline iphone">
                 <div class="layui-input-inline">
                   <i class="layui-icon layui-icon-cellphone iphone-icon"></i>
-                  <input type="text" name="id" id="id" lay-verify="required|number" placeholder="请输入ID" autocomplete="off" class="layui-input">
+                  <input type="text" name="id" id="id" lay-verify="required|number" 
+                  placeholder="请输入ID" autocomplete="off" class="layui-input">
                 </div>
               </div>
 
               <div class="layui-inline iphone">
                 <div class="layui-input-inline">
                   <i class="layui-icon layui-icon-password iphone-icon"></i>
-                  <input type="password" name="password" id="password" lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                  <input type="password" name="password" id="password" lay-verify="required" 
+                  placeholder="请输入密码" autocomplete="off" class="layui-input">
                 </div>
               </div>
 
             </div>
             <div class="layui-form-item login-btn">
               <div class="layui-input-block">
-                <button class="layui-btn" lay-submit="" lay-filter="login_btn" >登录</button>
+                <button id="loginButton" class="layui-btn" lay-submit="" lay-filter="loginButton">登录</button>
               </div>
             </div>
+            <script>
+            	layui.use(['form', 'jquery', 'layer'], function() {
+            		var form = layui.form;
+            		var $ = layui.jquery;
+            		var layer = layui.layer;
+                	form.on('submit(loginButton)', function() {
+                		$.ajax({
+                			url:"/campusMarket/login",
+                			type:"POST",
+                			data:new FormData(document.getElementById("loginForm")),
+                			processData:false,
+                			contentType:false,
+                			success: function(ret) {
+                				window.location.href = "index";
+                			},
+                			error: function(ret) {
+                				alert("用户名或密码错误");
+                			}
+                		});
+                		return false;
+                	});
+            	})
+            </script>
           </form>
         </div>
       </div>

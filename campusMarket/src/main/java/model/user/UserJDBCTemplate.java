@@ -49,11 +49,11 @@ public class UserJDBCTemplate implements UserDAO {
 					// TODO Auto-generated method stub
 					User u=new User();
 					
-					u.setId(rs.getString("uid"));
+					u.setId(rs.getString("id"));
 					u.setCampus(rs.getString("campus"));
 					u.setGender(rs.getString("gender"));
 					u.setIconPath(rs.getString("iconPath"));
-					u.setName(rs.getString("uname"));
+					u.setName(rs.getString("name"));
 					u.setPassword(rs.getString("password"));
 					u.setSchool(rs.getString("school"));
 					return u;

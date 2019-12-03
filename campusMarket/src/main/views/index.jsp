@@ -18,8 +18,13 @@
         <a href="#">首页</a>
       </p>
       <div class="sn-quick-menu">
-        <div class="login"><a href="/campusMarket/loginPage">登录</a></div>
-        <div class="login"><a href="/campusMarket/registerPage">注册</a></div>
+      <%
+      		if(session.getAttribute("me")!=null)
+      			out.println("<div class=\"login\"><a href=\"managePage\">我的小拍</a></div>");
+      		else
+      			out.println("<div class=\"login\"><a href=\"loginPage\">登录</a></div>" 
+      			 + "<div class=\"login\"><a href=\"registerPage\">注册</a></div>");
+      %>
       </div>
     </div>
   </div>
@@ -35,7 +40,8 @@
         </h1>
         <div class="mallSearch">
           <form action="commodityPage" method="get" class="layui-form" novalidate>
-            <input type="text" name="keyword" required  lay-verify="required" autocomplete="off" class="layui-input" placeholder="请输入需要的商品">
+            <input type="text" name="keyword" required  lay-verify="required"
+             autocomplete="off" class="layui-input" placeholder="请输入需要的商品">
             <button class="layui-btn" lay-submit lay-filter="formDemo">
                 <i class="layui-icon layui-icon-search"></i>
             </button>

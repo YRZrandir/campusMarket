@@ -28,7 +28,8 @@
       		if(session.getAttribute("me")!=null)
       			out.println("<div class=\"login\"><a href=\"managePage\">我的小拍</a></div>");
       		else
-      			out.println("<div class=\"login\"><a href=\"loginPage\">登录</a></div><div class=\"login\"><a href=\"registerPage\">注册</a></div>");
+      			out.println("<div class=\"login\"><a href=\"loginPage\">登录</a></div>" 
+      			 + "<div class=\"login\"><a href=\"registerPage\">注册</a></div>");
       %>
       </div>
     </div>
@@ -45,8 +46,10 @@
           </a>
         </h1>
         <div class="mallSearch">
-          <form action="" class="layui-form" novalidate>
-            <input type="text" name="title" required  lay-verify="required" autocomplete="off" class="layui-input" placeholder="请输入需要的商品">
+          <form action="commodityPage" method="get" class="layui-form" novalidate>
+            <input type="text" name="keyword" required  lay-verify="required"
+             autocomplete="off" class="layui-input" placeholder="请输入需要的商品">
+             
             <button class="layui-btn" lay-submit lay-filter="formDemo">
                 <i class="layui-icon layui-icon-search"></i>
             </button>

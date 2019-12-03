@@ -78,12 +78,20 @@
     	User u = (User)session.getAttribute("user");
     	name = p.getName();
     	price = p.getPrice();
-    	description = p.getDescription();
-    	iconPath = p.getIconPath().split("#");
-    	for (int i = 1;i < iconPath.length;i++) {
-    		iconPath[i] = "ProductImage/" + iconPath[i];
-    	}
     	phone = u.getTelephone();
+    	
+    	description = p.getDescription();
+    	String paths = p.getIconPath();
+    	if(paths.isEmpty()) {
+    		iconPath = new String[2];
+    		iconPath[0] = "";
+    		iconPath[1] = "ProductImage/default.jpg";
+    	} else {
+    		iconPath = paths.split("#");
+        	for (int i = 1;i < iconPath.length;i++) {
+        		iconPath[i] = "ProductImage/" + iconPath[i];
+        	}
+    	}
     %>
     <div class="data-cont-wrap w1200">
       <div class="crumb">

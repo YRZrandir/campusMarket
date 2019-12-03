@@ -22,8 +22,8 @@
 <script>
 $("#addProductButton").click(function() {
 	var form = new FormData(document.getElementById("addProductForm"));
-	var userId = "201700301111";<!--get userId -->
-	var time = new Date().toUTCString();<!--get current time -->
+	var userId = "201700301111"; <!--get userId -->
+	var time = new Date().toUTCString(); <!--get current time -->
 	console.log(time);
 	form.append("userId", userId);
 	form.append("time", time);
@@ -41,7 +41,6 @@ $("#addProductButton").click(function() {
 		}
 	})
 })
-
 </script>
 </body>
 </html>
