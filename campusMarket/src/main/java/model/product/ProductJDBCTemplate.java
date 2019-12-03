@@ -153,6 +153,7 @@ public class ProductJDBCTemplate implements ProductDAO {
 					p.setUserId(rs.getString("userId"));
 					p.setId(rs.getString("id"));
 					p.setPrice(rs.getString("price"));
+					p.setDirectory(rs.getString("directory"));
 					return p;
 				}
 				});
@@ -242,5 +243,27 @@ public class ProductJDBCTemplate implements ProductDAO {
 		return list;
 	}
 
+	public ArrayList<Product> getByUserId(String userId) {
+		String sql="select * from Product where userId ='" + userId + "'";
+		
+		 ArrayList<Product> list = (ArrayList<Product>) jdbcTemplateObject.query(sql, new RowMapper<Product>() {
 
+				@Override
+				public Product mapRow(ResultSet rs, int rowNum) throws SQLException {
+					// TODO Auto-generated method stub
+					Product p=new Product();
+					p.setDescription(rs.getString("description"));
+					p.setIconPath(rs.getString("iconPath"));
+					p.setName(rs.getString("name"));
+					p.setTime(rs.getString("time"));
+					p.setUserId(rs.getString("userid"));
+					p.setId(rs.getString("id"));
+					p.setPrice(rs.getString("price"));
+					p.setDirectory(rs.getString("directory"));
+					return p;
+				}
+				
+				});
+		 return list;
+	}
 }

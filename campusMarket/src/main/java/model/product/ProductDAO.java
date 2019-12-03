@@ -59,4 +59,6 @@ public interface ProductDAO {
 	
 	public ArrayList<Product> searchByDirectory(String directory);
 	
+	public ArrayList<Product> getByUserId(String userId);
+	
 }

@@ -40,9 +40,20 @@ public class PageController {
 	}
 
 	@RequestMapping(value = "/managePage", method=RequestMethod.GET)
-	public String managePage(HttpServletRequest request, HttpSession session) {
+	public String managePage(
+			@RequestParam("userId")	String 	userId,
+			HttpServletRequest 			request, 
+			HttpSession 				session) {
 		checkCookie(request, session);
-		return "manage";
+		if(IsUserLogin(request)) {
+			ApplicationContext context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
+			ProductDAO productDAO = context.getBean("ProductJDBCTemplate", ProductJDBCTemplate.class);
+			ArrayList<Product> products = productDAO.getByUserId(userId);
+			session.setAttribute("products", products);
+			return "manage";
+		} else {
+			return "index";
+		}
 	}
 
 	@RequestMapping(value = "/aboutPage", method=RequestMethod.GET)
@@ -96,5 +107,9 @@ public class PageController {
 			UserDAO userDAO = context.getBean("UserJDBCTemplate", UserJDBCTemplate.class);
 			session.setAttribute("me", userDAO.getUserById(id));
 		} 
+	}
+	
+	private boolean IsUserLogin(HttpServletRequest request) {
+		return CookieTools.getCookieId(request) != null;
 	}
 }

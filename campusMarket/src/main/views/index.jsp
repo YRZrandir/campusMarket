@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+  <%@ page language="java" import="java.util.*, model.user.User" pageEncoding="UTF-8"%>
   <meta charset="UTF-8">
   <title>校园小拍</title>
   <link rel="stylesheet" type="text/css" href="res/static/css/main.css">
@@ -15,15 +15,19 @@
     <div class="site-nav w1200">
       <p class="sn-back-home">
         <i class="layui-icon layui-icon-home"></i>
-        <a href="#">首页</a>
+        <a href="index">首页</a>
       </p>
       <div class="sn-quick-menu">
+      <%!User me; %>
       <%
-      		if(session.getAttribute("me")!=null)
-      			out.println("<div class=\"login\"><a href=\"managePage\">我的小拍</a></div>");
-      		else
+      		me = (User)session.getAttribute("me");
+      		if(me != null){
+      			String url = "managePage?userId=" + me.getId();
+      			out.println("<div class=\"login\"><a href=\"" + url + "\">我的小拍</a></div>");
+      		} else {
       			out.println("<div class=\"login\"><a href=\"loginPage\">登录</a></div>" 
-      			 + "<div class=\"login\"><a href=\"registerPage\">注册</a></div>");
+      	      			 + "<div class=\"login\"><a href=\"registerPage\">注册</a></div>");
+      		}
       %>
       </div>
     </div>

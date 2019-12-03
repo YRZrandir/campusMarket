@@ -1,12 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-<%@ page language="java" pageEncoding="UTF-8"%>
+<%@ page 
+language="java" 
+pageEncoding="UTF-8"
+import="java.util.*,java.net.*,model.product.Product,model.user.User"
+%>
 <meta charset="UTF-8">
 <title>上架商品</title>
 <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
 </head>
 <body>
+<%!User me%>
+<%
+	me = session.getAttribute("me");
+	if(me != null)
+		out.println("<div class=\"login\"><a href=\"managePage\">我的小拍</a></div>");
+	else {
+		out.println("<script>window.location.href=\"index\" </script>");
+	}
+%>
 <div>
 	<form id="addProductForm">
 		name:<input type="text" name="name">
@@ -22,7 +35,7 @@
 <script>
 $("#addProductButton").click(function() {
 	var form = new FormData(document.getElementById("addProductForm"));
-	var userId = "201700301111"; <!--get userId -->
+	var userId = <%=me.getId()%>; <!--get userId -->
 	var time = new Date().toUTCString(); <!--get current time -->
 	console.log(time);
 	form.append("userId", userId);
