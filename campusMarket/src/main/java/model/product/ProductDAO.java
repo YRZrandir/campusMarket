@@ -51,5 +51,5 @@ public interface ProductDAO {
 	 * Return an ArrayList<Product> containing all results;
 	 * If no result find, return empty ArrayList<Product> instead of null
 	 */
-	public ArrayList<Product> searchProduct(String name, String school, String campus, String directory);
+	public ArrayList<Product> searchProduct(String[] keywords);
 }

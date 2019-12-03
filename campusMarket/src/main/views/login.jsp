@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"%>
+<%@ page language="java" pageEncoding="utf-8"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -112,9 +111,6 @@
       base: 'res/static/js/util' //你存放新模块的目录，注意，不是layui的模块目录
     }).use(['jquery','form','layer'],function(){
           var $ = layui.$,layer=layui.layer,form = layui.form;
-
-
-
     })
   </script>
 

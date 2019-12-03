@@ -89,15 +89,25 @@
             <div class="cont-list layui-clear" id="list-cont">
 <%! int pn=0;%>
 <%
-	ArrayList<Product> p=(ArrayList<Product>)session.getAttribute("product");
+	
+	ArrayList<Product> p = (ArrayList<Product>)session.getAttribute("product");
 	pn=p.size();
 	for(int i=0;i<p.size();i++)
 	{
+		String name = p.get(i).getName();
+		String price = p.get(i).getPrice();
+		String iconPath = p.get(i).getIconPath();
+		if(!iconPath.isEmpty()) {
+			iconPath = iconPath.split("#")[1];
+			iconPath = "ProductImage/" + iconPath;
+		} else {
+			iconPath = "res/static/img/paging_img1.jpg"; //default img
+		}
 		out.println(
 				"<div class=\"item\">"
 				
 	               + "<div class=\"img\">"
-	        			+"<a href=\"javascript:;\"><img src=\"ProductImage/timg8.jpg\" style=\"width:280px\"></a>"
+	        			+"<a href=\"javascript:;\"><img src=\"" + iconPath +"\" style=\"width:280px\"></a>"
 	      			+"</div>"
 	      			
 				      +"<div class=\"text\">"

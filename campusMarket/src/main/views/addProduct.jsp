@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+<%@ page language="java" pageEncoding="UTF-8"%>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>上架商品</title>
 <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
 </head>
 <body>

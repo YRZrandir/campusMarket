@@ -29,37 +29,6 @@ import tools.*;
 public class UserController {
 	private ApplicationContext context;
 	
-	@RequestMapping(value="/loginPage")
-	public String loginPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		return "login";
-	}
-	@RequestMapping(value="/indexPage")
-	public String indexPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		
-		return "index";
-	}
-	@RequestMapping(value="/registerPage")
-	public String registerPage(HttpServletRequest request, HttpServletResponse response) {
-		
-		return "register";
-	}
-	@RequestMapping(value="/managePage")
-	public String managePage(HttpServletRequest request, HttpServletResponse response) {
-		
-		return "manage";
-	}
-	@RequestMapping(value="/aboutPage")
-	public String aboutPage(HttpServletRequest request, HttpServletResponse response) {
-		
-		return "about";
-	}
-	@RequestMapping(value="/commodityPage")
-	public String commodityPage(HttpServletRequest request, HttpServletResponse response) {
-		
-		return "commodity";
-	}
-	
-	
 	@CrossOrigin	(origins = "*")
 	@RequestMapping	(value="/login", method=RequestMethod.POST)
 	@ResponseBody

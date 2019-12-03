@@ -73,16 +73,11 @@ public class ProductController {
 	
 	@RequestMapping(value="searchProduct", method=RequestMethod.POST)
 	@ResponseBody
-	public void searchProduct(
-			@RequestParam("name")		String name,
-			@RequestParam("school")		String school,
-			@RequestParam("campus")		String campus,
-			@RequestParam("directory")	String directory,
-										HttpServletResponse	response) {
+	public void searchProduct(@RequestParam("keyword") String keyword, HttpServletResponse	response) {
 		response.setCharacterEncoding("UTF-8");
 		context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
 		ProductDAO productDAO = context.getBean("ProductJDBCTemplate", ProductJDBCTemplate.class);
-		ArrayList<Product> results = productDAO.searchProduct(name, school, campus, directory);
+		ArrayList<Product> results = productDAO.searchProduct(keyword.split(" "));
 		if(results != null) {
 			HttpTools.writeObject(response, results);
 		} else {

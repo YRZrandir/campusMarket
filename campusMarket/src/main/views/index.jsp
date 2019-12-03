@@ -1,10 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
   <meta charset="UTF-8">
-  <title>校园小拍 首页</title>
+  <title>校园小拍</title>
   <link rel="stylesheet" type="text/css" href="res/static/css/main.css">
   <link rel="stylesheet" type="text/css" href="res/layui/css/layui.css">
   <script type="text/javascript" src="res/layui/layui.js"></script>
@@ -19,12 +18,8 @@
         <a href="#">首页</a>
       </p>
       <div class="sn-quick-menu">
-      <%
-      		if(session.getAttribute("id")!=null)
-      			out.println("<div class=\"login\"><a href=\"managePage\">我的小拍</a></div>");
-      		else
-      			out.println("        <div class=\"login\"><a href=\"loginPage\">登录</a></div><div class=\"login\"><a href=\"registerPage\">注册</a></div>");
-      %>
+        <div class="login"><a href="/campusMarket/loginPage">登录</a></div>
+        <div class="login"><a href="/campusMarket/registerPage">注册</a></div>
       </div>
     </div>
   </div>
@@ -34,7 +29,7 @@
     <div class="headerLayout w1200">
       <div class="headerCon">
         <h1 class="mallLogo">
-          <a href="#" title="校园小拍">
+          <a href="#" title="校园小拍">
             <img src="res/static/img/logo.png">
           </a>
         </h1>
@@ -47,9 +42,6 @@
             <input type="hidden" name="" value="">
           </form>
         </div>
-
-
-
       </div>
     </div>
   </div>
@@ -69,10 +61,12 @@
     </div>
     <div class="category-con">
       <div class="category-inner-con w1200">
-       
-          
 
+        <div class="category-tab-content">
+          <div class="nav-con">
 
+          </div>
+        </div>
       </div>
       <div class="category-banner">
         <div class="w1200">
@@ -216,38 +210,38 @@
   </div>
   <script type="text/javascript">
 
-layui.config({
-    base: 'res/static/js/util/' //你存放新模块的目录，注意，不是layui的模块目录
-  }).use(['mm','carousel'],function(){
-      var carousel = layui.carousel,
-     mm = layui.mm;
-     var option = {
-        elem: '#test1'
-        ,width: '100%' //设置容器宽度
-        ,arrow: 'always'
-        ,height:'298' 
-        ,indicator:'none'
-      }
-      carousel.render(option);
-      // 模版引擎导入
-     // var ins = carousel.render(option);
-     // var html = demo.innerHTML;
-     // var listCont = document.getElementById('list-cont');
-     // // console.log(layui.router("#/about.html"))
-     //  mm.request({
-     //    url: 'json/index.json',
-     //    success : function(res){
-     //      console.log(res)
-     //      listCont.innerHTML = mm.renderHtml(html,res)
-     //      ins.reload(option);
-     //    },
-     //    error: function(res){
-     //      console.log(res);
-     //    }
-     //  })
-    
+  layui.config({
+	    base: 'res/static/js/util/' //你存放新模块的目录，注意，不是layui的模块目录
+	  }).use(['mm','carousel'],function(){
+	      var carousel = layui.carousel,
+	     mm = layui.mm;
+	     var option = {
+	        elem: '#test1'
+	        ,width: '100%' //设置容器宽度
+	        ,arrow: 'always'
+	        ,height:'298' 
+	        ,indicator:'none'
+	      }
+	      carousel.render(option);
+	      // 模版引擎导入
+	     // var ins = carousel.render(option);
+	     // var html = demo.innerHTML;
+	     // var listCont = document.getElementById('list-cont');
+	     // // console.log(layui.router("#/about.html"))
+	     //  mm.request({
+	     //    url: 'json/index.json',
+	     //    success : function(res){
+	     //      console.log(res)
+	     //      listCont.innerHTML = mm.renderHtml(html,res)
+	     //      ins.reload(option);
+	     //    },
+	     //    error: function(res){
+	     //      console.log(res);
+	     //    }
+	     //  })
+	    
 
-});
+	});
   </script>
 </body>
 </html>

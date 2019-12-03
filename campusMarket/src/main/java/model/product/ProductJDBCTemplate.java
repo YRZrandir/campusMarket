@@ -121,12 +121,26 @@ public class ProductJDBCTemplate implements ProductDAO {
 	}
 
 	@Override
-	public ArrayList<Product> searchProduct(String name, String school, String campus, String directory) {
+	public ArrayList<Product> searchProduct(String[] keywords) {
 		// TODO Auto-generated method stub
-		String sql="select * from Product natural join user where pname='"+name+"'"+"and school ='"+school+"' and campus ='"+campus+"'";
-
-		
-		 ArrayList<Product> list = (ArrayList<Product>) jdbcTemplateObject.query(sql, new RowMapper<Product>() {
+		String sql="select * from product,user where product.userId=user.id and status='normal'";
+		if(keywords.length != 0) {
+			sql += " and (";
+			for(int i = 0;i < keywords.length;i++) {
+				String keyword = keywords[i];
+				sql += " (product.name like '%" + keyword + "%' ";
+				sql += " or school like '%" + keyword + "%' ";
+				sql += " or campus like '%" + keyword + "%' ";
+				sql += " or directory like '%" + keyword + "%' ";
+				sql += " or description like '%" + keyword + "%' ";
+				sql += " )";
+				if (i < keywords.length - 1) {
+					sql += " or ";
+				}
+			}
+			sql += ")";
+		}
+		ArrayList<Product> list = (ArrayList<Product>) jdbcTemplateObject.query(sql, new RowMapper<Product>() {
 
 				@Override
 				public Product mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -134,12 +148,11 @@ public class ProductJDBCTemplate implements ProductDAO {
 					Product p=new Product();
 					p.setDescription(rs.getString("description"));
 					p.setIconPath(rs.getString("iconPath"));
-					p.setName(rs.getString("pname"));
+					p.setName(rs.getString("name"));
 					p.setTime(rs.getString("time"));
-					p.setUserId(rs.getString("uid"));
-					p.setId(rs.getString("pid"));
+					p.setUserId(rs.getString("userId"));
+					p.setId(rs.getString("id"));
 					p.setPrice(rs.getString("price"));
-					
 					return p;
 				}
 				});

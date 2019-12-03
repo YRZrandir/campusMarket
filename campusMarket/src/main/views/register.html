@@ -1,137 +1,47 @@
-
 <!DOCTYPE html>
 <html><head>
-	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-	<meta charset="UTF-8">
-	<title>校园小拍 注册</title>
-	<link rel="stylesheet" type="text/css" href="res/static/css/main.css">
-	<link rel="stylesheet" type="text/css" href="res/layui/css/layui.css">
-	<script type="text/javascript" src="res/layui/layui.js"></script>
-
-	<style>
-		body{background: url("res/static/img/th.jpg")}
-	</style>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<title>Register</title>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
 </head>
 <body>
-<div >
-
-
-		<h1 align="center" style="margin-top: 50px;font-family:幼圆;font-weight:bolder;color: #F8F8F8">注   册</h1>
-
-
-	<div class="layui-container" style="width: 45%;">
-		<div class="layui-card" style="margin-top: 30px">
-
-
-
-			<form id="registerForm" class="layui-form" action="">
-				<div class="layui-form-item">
-
-
-					<div class="layui-input-block"  style="margin: 10px">
-						<label  class="layui-form-label">学号</label>
-						<input placeholder="userid" type="text" name="id" lay-verify="required" autocomplete="off" class="layui-input">
-					</div>
-
-
-					<div class="layui-input-block"  style="margin: 10px">
-						<label class="layui-form-label">姓名</label>
-						<input placeholder="name" type="text" name="name" value="" lay-verify="required" autocomplete="off" class="layui-input">
-					</div>
-
-
-					<div class="layui-input-block"  style="margin: 10px">
-						<label class="layui-form-label">密码</label>
-						<input placeholder="password" type="password" name="password" lay-verify="required" autocomplete="off" class="layui-input">
-					</div>
-
-
-					<div class="layui-input-block"  style="margin: 10px">
-						<label class="layui-form-label">性别</label>
-						<div class="layui-form">
-							<select name="sex" id="sex" lay-filter="myselect">
-								<option value="none">未知</option>
-								<option value="female">女</option>
-								<option value="male">男</option>
-							</select>
-						</div>
-
-					</div>
-
-
-					<div class="layui-input-block"  style="margin: 10px">
-						<label class="layui-form-label">学校</label>
-						<input placeholder="school" type="text" name="school" lay-verify="required" autocomplete="off" class="layui-input">
-					</div>
-
-
-
-					<div class="layui-input-block"  style="margin: 10px">
-						<label class="layui-form-label" >校区</label>
-						<input type="text" placeholder="campus" name="campus" value="" lay-verify="required" autocomplete="off" class="layui-input">
-					</div>
-
-
-					<div class="layui-input-block" style="margin: 10px">
-						<label class="layui-form-label">电话</label>
-						<input type="text" placeholder="telephone" name="telephone" value="" lay-verify="required" autocomplete="off" class="layui-input">
-					</div>
-
-
-					<div class="layui-input-block" style="margin: 10px">
-						<label class="layui-form-label">头像</label>
-						<input type="file" name="file" lay-verify="required" autocomplete="off" class="layui-input">
-					</div>
-				</div>
-				<div class="layui-form-item"  align="left">
-
-					<button class="layui-btn" style="margin:10px" id="registerButton" value=""  lay-submit="" lay-filter="demo1" >注册</button>
-
-				</div>
-
-			</form>
-		</div>
-
-	</div>
-</div>
-
-<script>
-
-
-	layui.config({
-		base: '../res/static/js/util' //你存放新模块的目录，注意，不是layui的模块目录
-	}).use(['jquery','form'],function() {
-		var $ = layui.$, form = layui.form;
-
-
-
-
+<div>
+	<form id="registerForm">
+		id:<input type="text" name="id" value="123456">
+		name:<input type="text" name="name" value="小明">
+		password:<input type="password" name="password">
+		gender:<select name="gender">
+		<option value="male" selected="selected">男</option>
+		<option value="female">女</option>
+		</select>
+		school:<input type="text" name="school" value="山东大学">
+		campus:<input type="text" name="campus" value="软件园">
+		telephone:<input type="text" name="telephone" value="111">
+		头像：<input type="file" name="file">
+		
+		<input type="button" id="registerButton" value="Register">
+	</form>
+	<script>
+		var user;
 		$("#registerButton").click(function() {
-
-
-			if(1)
-			{ $.ajax({
+			var form = new FormData(document.getElementById("registerForm"))
+			$.ajax({
 				url:"/campusMarket/register",
 				type:"post",
 				data:form,
 				processData:false,
 				contentType:false,
 				success:function(ret) {
-					alert("success")
+					user = $.parseJSON(ret);
+					console.log(user["id"]);
 				},
 				error: function(ret) {
 					alert("error")
 				}
-			}) }
-
-
-
-
+			})
 		})
-	})
-</script>
-
-
+	</script>
 </div>
 
 </body></html>

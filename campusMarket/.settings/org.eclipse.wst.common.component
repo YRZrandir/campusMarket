@@ -3,8 +3,10 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/conf"/>
         <wb-resource deploy-path="/WEB-INF/" source-path="/src/main/webapp" tag="defaultRootSource"/>
-        <wb-resource deploy-path="/WEB-INF/views" source-path="/src/main/views"/>
         <wb-resource deploy-path="/res" source-path="/src/main/res"/>
+        <wb-resource deploy-path="/ProductImage" source-path="/src/main/ProductImage"/>
+        <wb-resource deploy-path="/Image" source-path="/src/main/Image"/>
+        <wb-resource deploy-path="/WEB-INF/views" source-path="/src/main/views"/>
         <property name="context-root" value="campusMarket"/>
         <property name="java-output-path" value="/campusMarket/target/classes"/>
     </wb-module>
