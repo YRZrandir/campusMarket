@@ -86,7 +86,6 @@
             	layui.use(['form', 'jquery', 'layer'], function() {
             		var form = layui.form;
             		var $ = layui.jquery;
-            		var layer = layui.layer;
                 	form.on('submit(loginButton)', function() {
                 		$.ajax({
                 			url:"/campusMarket/login",

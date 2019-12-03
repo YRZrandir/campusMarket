@@ -86,7 +86,12 @@ public class UserController {
 			UserDAO userDAO = context.getBean("UserJDBCTemplate", UserJDBCTemplate.class);
 			
 			User newUser = userDAO.addUser(id, name, password, gender, school, campus, iconPath, telephone);
-			HttpTools.writeObject(response, newUser);
+			if(newUser != null) {
+				CookieTools.writeCookie(response, "id", newUser.getId());
+				HttpTools.writeObject(response, newUser);
+			} else {
+				HttpTools.writeJSON(response, "fail");
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			HttpTools.writeJSON(response, "fail");

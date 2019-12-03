@@ -4,7 +4,7 @@
 <html><head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<meta charset="UTF-8">
-	<title>Register</title>
+	<title>注册</title>
 	<link rel="stylesheet" type="text/css" href="res/static/css/main.css">
 	<link rel="stylesheet" type="text/css" href="res/layui/css/layui.css">
 	<script type="text/javascript" src="res/layui/layui.js"></script>
@@ -47,7 +47,7 @@
 					<div class="layui-input-block"  style="margin: 10px">
 						<label class="layui-form-label">性别</label>
 						<div class="layui-form">
-							<select name="sex" id="sex" lay-filter="myselect">
+							<select name="gender" id="gender" lay-filter="myselect">
 								<option value="none">未知</option>
 								<option value="female">女</option>
 								<option value="male">男</option>
@@ -83,7 +83,8 @@
 				</div>
 				<div class="layui-form-item"  align="left">
 
-					<button class="layui-btn" style="margin:10px" id="registerButton" value=""  lay-submit="" lay-filter="demo1" >注册</button>
+					<button class="layui-btn" style="margin:10px" id="registerButton"
+					 value=""  lay-submit="" lay-filter="registerButton" >注册</button>
 
 				</div>
 
@@ -94,39 +95,35 @@
 </div>
 
 <script>
-
-
 	layui.config({
 		base: '../res/static/js/util' //你存放新模块的目录，注意，不是layui的模块目录
-	}).use(['jquery','form'],function() {
-		var $ = layui.$, form = layui.form;
-
-
-
-
-		$("#registerButton").click(function() {
-
-
-			if(1)
-			{ $.ajax({
-				url:"/campusMarket/register",
-				type:"post",
-				data:form,
-				processData:false,
-				contentType:false,
-				success:function(ret) {
-					alert("success")
-				},
-				error: function(ret) {
-					alert("error")
-				}
-			}) }
-
-
-
-
-		})
 	})
+</script>
+<script>
+layui.use(['form', 'jquery', 'layer'], function() {
+	var form = layui.form;
+	var $ = layui.jquery;
+	form.on('submit(registerButton)', function() {
+		$.ajax({
+			url:"/campusMarket/register",
+			type:"POST",
+			data:new FormData(document.getElementById("registerForm")),
+			processData:false,
+			contentType:false,
+			success: function(ret) {
+				if(ret != "fail") {
+					window.location.href = "index";
+				} else {
+					alert("注册错误");
+				}
+			},
+			error: function(ret) {
+				alert("注册错误");
+			}
+		});
+		return false;
+	});
+})
 </script>
 
 
