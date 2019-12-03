@@ -159,5 +159,88 @@ public class ProductJDBCTemplate implements ProductDAO {
 		return list;
 	}
 
+	
+	public Product getById(String id) {
+		// TODO Auto-generated method stub
+		String sql="select * from Product where id ='" + id + "'";
+		
+		 ArrayList<Product> list = (ArrayList<Product>) jdbcTemplateObject.query(sql, new RowMapper<Product>() {
+
+				@Override
+				public Product mapRow(ResultSet rs, int rowNum) throws SQLException {
+					// TODO Auto-generated method stub
+					Product p=new Product();
+					p.setDescription(rs.getString("description"));
+					p.setIconPath(rs.getString("iconPath"));
+					p.setName(rs.getString("name"));
+					p.setTime(rs.getString("time"));
+					p.setUserId(rs.getString("userid"));
+					p.setId(rs.getString("id"));
+					p.setPrice(rs.getString("price"));
+					p.setDirectory(rs.getString("directory"));
+					return p;
+				}
+				
+				});
+		 if(list == null || list.isEmpty()) {
+			 return null;
+		 } else {
+			 return list.get(0);
+		 }
+	}
+	
+	
+	public ArrayList<Product> searchByDirectory(String directory) {
+		// TODO Auto-generated method stub
+		String sql="select * from Product where directory ='"+directory+"'";
+
+		
+		 ArrayList<Product> list = (ArrayList<Product>) jdbcTemplateObject.query(sql, new RowMapper<Product>() {
+
+				@Override
+				public Product mapRow(ResultSet rs, int rowNum) throws SQLException {
+					// TODO Auto-generated method stub
+					Product p=new Product();
+					p.setDescription(rs.getString("description"));
+					p.setIconPath(rs.getString("iconPath"));
+					p.setName(rs.getString("name"));
+					p.setTime(rs.getString("time"));
+					p.setUserId(rs.getString("userid"));
+					p.setId(rs.getString("id"));
+					p.setPrice(rs.getString("price"));
+					p.setDirectory(rs.getString("directory"));
+					return p;
+				}
+				
+				});
+		return list;
+	}
+	
+	
+	public ArrayList<Product> getAll() {
+		// TODO Auto-generated method stub
+		String sql="select * from Product";
+
+		 ArrayList<Product> list = (ArrayList<Product>) jdbcTemplateObject.query(sql, new RowMapper<Product>() {
+
+				@Override
+				public Product mapRow(ResultSet rs, int rowNum) throws SQLException {
+					// TODO Auto-generated method stub
+					Product p=new Product();
+					p.setDescription(rs.getString("description"));
+					p.setIconPath(rs.getString("iconPath"));
+					p.setName(rs.getString("name"));
+					p.setTime(rs.getString("time"));
+					p.setUserId(rs.getString("userid"));
+					p.setId(rs.getString("id"));
+					p.setPrice(rs.getString("price"));
+					p.setDirectory(rs.getString("directory"));
+					return p;
+				}
+				
+				});
+		return list;
+	}
+
 
 }

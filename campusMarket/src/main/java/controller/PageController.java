@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.net.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import model.product.*;
+import model.user.*;
+import tools.CookieTools;
 
 @Controller
 public class PageController {
@@ -26,7 +29,8 @@ public class PageController {
 	}
 
 	@RequestMapping(value = "/index", method=RequestMethod.GET)
-	public String indexPage() {
+	public String indexPage(HttpServletRequest request, HttpSession session) {
+		checkCookie(request, session);
 		return "index";
 	}
 
@@ -36,17 +40,23 @@ public class PageController {
 	}
 
 	@RequestMapping(value = "/managePage", method=RequestMethod.GET)
-	public String managePage() {
+	public String managePage(HttpServletRequest request, HttpSession session) {
+		checkCookie(request, session);
 		return "manage";
 	}
 
 	@RequestMapping(value = "/aboutPage", method=RequestMethod.GET)
-	public String aboutPage() {
+	public String aboutPage(HttpServletRequest request, HttpSession session) {
+		checkCookie(request, session);
 		return "about";
 	}
 
 	@RequestMapping(value = "/commodityPage", method=RequestMethod.GET)
-	public String commodityPage(@RequestParam(name="keyword", required=true) String keyword, HttpSession session) {
+	public String commodityPage(
+			@RequestParam(name="keyword", required=true) String keyword,
+			HttpServletRequest 	request,
+			HttpSession 		session) {
+		checkCookie(request, session);
 		ApplicationContext context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
 		ProductDAO productDAO = context.getBean("ProductJDBCTemplate", ProductJDBCTemplate.class);
 		ArrayList<Product> results = productDAO.searchProduct(keyword.split(" "));
@@ -55,7 +65,36 @@ public class PageController {
 	}
 
 	@RequestMapping(value = "/addProductPage", method=RequestMethod.GET)
-	public String addProductPage() {
+	public String addProductPage(HttpServletRequest request, HttpSession session) {
+		checkCookie(request, session);
 		return "addProduct";
+	}
+	
+	@RequestMapping(value = "/detail", method=RequestMethod.GET)
+	public String detailPage(
+			@RequestParam(name="id", required=true) String id,
+			HttpServletRequest 	request,
+			HttpSession 		session) {
+		checkCookie(request, session);
+		ApplicationContext context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
+		UserDAO userDAO = context.getBean("UserJDBCTemplate", UserJDBCTemplate.class);
+		ProductDAO productDAO = context.getBean("ProductJDBCTemplate", ProductJDBCTemplate.class);
+		Product product = productDAO.getById(id);
+		String userId = product.getUserId();
+		User user = userDAO.getUserById(userId);
+		
+		session.setAttribute("product", product);
+		session.setAttribute("user", user);
+		return "details";
+	}
+	
+	
+	private void checkCookie(HttpServletRequest request, HttpSession session) {
+		String id = CookieTools.getCookieId(request);
+		if(id != null) {
+			ApplicationContext context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
+			UserDAO userDAO = context.getBean("UserJDBCTemplate", UserJDBCTemplate.class);
+			session.setAttribute("me", userDAO.getUserById(id));
+		} 
 	}
 }

@@ -1,5 +1,9 @@
-<%@ page language="java" import="java.util.*,model.product.Product" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"%>
+<%@ page 
+	language="java"
+	import="java.util.*,java.net.*,model.product.Product,model.user.User"
+	contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,10 +25,10 @@
       </p>
       <div class="sn-quick-menu">
       <%
-      		if(session.getAttribute("id")!=null)
+      		if(session.getAttribute("me")!=null)
       			out.println("<div class=\"login\"><a href=\"managePage\">我的小拍</a></div>");
       		else
-      			out.println("        <div class=\"login\"><a href=\"loginPage\">登录</a></div><div class=\"login\"><a href=\"registerPage\">注册</a></div>");
+      			out.println("<div class=\"login\"><a href=\"loginPage\">登录</a></div><div class=\"login\"><a href=\"registerPage\">注册</a></div>");
       %>
       </div>
     </div>
@@ -94,6 +98,7 @@
 	pn=p.size();
 	for(int i=0;i<p.size();i++)
 	{
+		String id = p.get(i).getId();
 		String name = p.get(i).getName();
 		String price = p.get(i).getPrice();
 		String iconPath = p.get(i).getIconPath();
@@ -103,11 +108,12 @@
 		} else {
 			iconPath = "res/static/img/paging_img1.jpg"; //default img
 		}
+		String url = "detail?id=" + id;
 		out.println(
 				"<div class=\"item\">"
 				
 	               + "<div class=\"img\">"
-	        			+"<a href=\"javascript:;\"><img src=\"" + iconPath +"\" style=\"width:280px\"></a>"
+	        			+"<a href=\"" + url + "\"><img src=\"" + iconPath +"\" style=\"width:280px\"></a>"
 	      			+"</div>"
 	      			
 				      +"<div class=\"text\">"
@@ -126,19 +132,6 @@
 	}
 
 %>
-              <div class="item">
-                <div class="img">
-                  <a href="javascript:;"><img src="res/static/img/paging_img1.jpg"></a>
-                </div>
-                <div class="text">
-                  <p class="title">森系小清新四件套</p>
-                  <p class="price">
-                    <span class="pri">￥200</span>
-                    <span class="nub">1266付款</span>
-                  </p>
-                </div>
-              </div>
-
             </div>
             <!-- 模版引擎导入 -->
             <!-- <script type="text/html" id="demo">

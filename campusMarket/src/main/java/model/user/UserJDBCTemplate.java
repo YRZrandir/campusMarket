@@ -88,7 +88,6 @@ public class UserJDBCTemplate implements UserDAO {
 				pst.setString(8, telephone);
 				return pst;
 			}
-			
 		});
 		return new User(id, name, password, gender, school, campus, iconPath, telephone);
 	}
@@ -118,4 +117,29 @@ public class UserJDBCTemplate implements UserDAO {
 		return new User(id, name, password, gender, school, campus, iconPath, telephone);
 	}
 
+	public User getUserById(String id) {
+		String sql="select * from user where id='"+id+"'";
+		 ArrayList<User> list = (ArrayList<User>) jdbcTemplateObject.query(sql, new RowMapper<User>() {
+
+				@Override
+				public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+					// TODO Auto-generated method stub
+					User u=new User();
+					
+					u.setId(rs.getString("id"));
+					u.setCampus(rs.getString("campus"));
+					u.setGender(rs.getString("gender"));
+					u.setIconPath(rs.getString("iconPath"));
+					u.setName(rs.getString("name"));
+					u.setPassword(rs.getString("password"));
+					u.setSchool(rs.getString("school"));
+					return u;
+				}
+				});
+		if(list.isEmpty()) {
+			return null;
+		} else {
+			return list.get(0);
+		}
+	}
 }

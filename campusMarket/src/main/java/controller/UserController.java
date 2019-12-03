@@ -45,6 +45,7 @@ public class UserController {
 			
 			User user = userDAO.getUserByIdAndPassword(id, password);
 			if(user != null) {
+				CookieTools.writeCookie(response, "id", user.getId());
 				HttpTools.writeObject(response, user);
 			} else {
 				HttpTools.writeJSON(response, "fail");

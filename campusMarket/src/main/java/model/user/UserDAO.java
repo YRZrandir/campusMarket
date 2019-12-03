@@ -52,4 +52,6 @@ public interface UserDAO {
 	 */
 	public User updateUser(String id, String name, String password, String gender,
 			String school, String campus, String iconPath, String telephone);
+	
+	public User getUserById(String id);
 }

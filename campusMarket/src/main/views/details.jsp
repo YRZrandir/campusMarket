@@ -1,10 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
+<%@ page language="java" import="java.util.*,model.product.*,model.user.*" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Document</title>
+  <title>校园小拍  详情</title>
   <link rel="stylesheet" type="text/css" href="res/static/css/main.css">
   <link rel="stylesheet" type="text/css" href="res/layui/css/layui.css">
   <script type="text/javascript" src="res/layui/layui.js"></script>
@@ -20,11 +20,17 @@
         <a href="#">首页</a>
       </p>
       <div class="sn-quick-menu">
+      <%! int code=0; %>
       <%
-      		if(session.getAttribute("id")!=null)
+      		if(session.getAttribute("me")!=null)
+      		{
       			out.println("<div class=\"login\"><a href=\"managePage\">我的小拍</a></div>");
+      			code=1;
+      		}
       		else
-      			out.println("        <div class=\"login\"><a href=\"loginPage\">登录</a></div><div class=\"login\"><a href=\"registerPage\">注册</a></div>");
+      		{
+      			out.println("<div class=\"login\"><a href=\"loginPage\">登录</a></div><div class=\"login\"><a href=\"registerPage\">注册</a></div>");
+      		}
       %>
       </div>
     </div>
@@ -66,44 +72,63 @@
         </div>
       </div>
     </div>
+    <%! String name,price,description,phone = null;String[] iconPath;%>
+    <%	
+    	Product p = (Product)session.getAttribute("product");
+    	User u = (User)session.getAttribute("user");
+    	name = p.getName();
+    	price = p.getPrice();
+    	description = p.getDescription();
+    	iconPath = p.getIconPath().split("#");
+    	for (int i = 1;i < iconPath.length;i++) {
+    		iconPath[i] = "ProductImage/" + iconPath[i];
+    	}
+    	phone = u.getTelephone();
+    %>
     <div class="data-cont-wrap w1200">
       <div class="crumb">
-        <a href="javascript:;">首页</a>
+        <a href="indexPage">首页</a>
         <span>></span>
-        <a href="javascript:;">所有商品</a>
+        <a href="commodityPage">所有商品</a>
         <span>></span>
-        <a href="javascript:;">产品详情</a>
+        <a href="">产品详情</a>
       </div>
       <div class="product-intro layui-clear">
         <div class="preview-wrap">
-          <a href="javascript:;"><img src="res/static/img/details_img1.jpg"></a>
+          <a href="javascript:;"><img src="<%=iconPath[1] %>" style="width:400px"></a>
         </div>
         <div class="itemInfo-wrap">
           <div class="itemInfo">
             <div class="title">
-              <h4>男女宝宝秋冬装套装0一1岁婴儿衣服潮加厚连体衣保暖冬季外出抱衣 </h4>
+              <h4><%=name %> </h4>
             </div>
 
-            <div class="summary">
-              <p class="reference"><span>参考价</span> <del>￥280.00</del></p>
-              <p class="activity"><span>卖家价格</span><strong class="price"><i>￥</i>99.00</strong></p>
+            <div class="summary" style="height:50%">
+              <p class="activity"><span>卖家价格</span><strong class="price"><i>￥</i><%=price %></strong></p>
             </div>
 
-            <div class="title">
-              <h6><textarea class="layui-textarea" readonly>这里放描述</textarea></h6>
+            <div class="description">
+              <h6><textarea class="layui-textarea" rows="9" readonly><%=description %></textarea></h6>
             </div>
 
             <div class="choose-btns">
-              <button class="layui-btn layui-btn-primary purchase-btn">联系卖家</button>
+              <button class="layui-btn layui-btn-primary purchase-btn" id="contact">联系方式</button>
             </div>
           </div>
         </div>
       </div>
       <div class="layui-clear">
           <h2>图片详情</h2>
-          <div class="item">
-            <img src="res/static/img/details_imgbig.jpg">
-          </div>
+          <%
+          	for(int i=1;i<iconPath.length;i++)
+          	{
+          		out.println(
+          				"<div class=\"item\">"
+          				+"<img src=\""+iconPath[i]+"\" style=\"width:1000px\">"
+          				+"</div>"
+          				);
+          	}
+          %>
         </div>
       </div>
     </div>
@@ -111,19 +136,20 @@
 <script type="text/javascript">
   layui.config({
     base: 'res/static/js/util/' //你存放新模块的目录，注意，不是layui的模块目录
-  }).use(['mm','jquery'],function(){
-      var mm = layui.mm,$ = layui.$;
-      var cur = $('.number-cont input').val();
-      $('.number-cont .btn').on('click',function(){
-        if($(this).hasClass('add')){
-          cur++;
-         
-        }else{
-          if(cur > 1){
-            cur--;
-          }  
-        }
-        $('.number-cont input').val(cur)
+  }).use(['jquery','layer'],function(){
+      var $ = layui.$,layer=layui.layer;
+      $('#contact').on('click',function(){
+    	  if(<%=code %>==0)
+        	  layer.msg('请登录！', {
+      	        time: 20000, //20s后自动关闭
+      	        btn: ['知道了']
+      	  })
+    	  else
+    	  layer.msg('<%=phone %>', {
+    	        time: 20000, //20s后自动关闭
+    	        btn: ['知道了']
+    	  })
+
       })
       
   });

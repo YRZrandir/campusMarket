@@ -52,4 +52,11 @@ public interface ProductDAO {
 	 * If no result find, return empty ArrayList<Product> instead of null
 	 */
 	public ArrayList<Product> searchProduct(String[] keywords);
+
+	public Product getById(String Id);
+	
+	public ArrayList<Product> getAll();
+	
+	public ArrayList<Product> searchByDirectory(String directory);
+	
 }
