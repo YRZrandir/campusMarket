@@ -53,9 +53,7 @@
 								<option value="male">男</option>
 							</select>
 						</div>
-
 					</div>
-
 
 					<div class="layui-input-block"  style="margin: 10px">
 						<label class="layui-form-label">学校</label>

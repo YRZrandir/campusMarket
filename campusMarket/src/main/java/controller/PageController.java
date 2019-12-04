@@ -40,15 +40,13 @@ public class PageController {
 	}
 
 	@RequestMapping(value = "/managePage", method=RequestMethod.GET)
-	public String managePage(
-			@RequestParam("userId")	String 	userId,
-			HttpServletRequest 			request, 
-			HttpSession 				session) {
-		checkCookie(request, session);
-		if(IsUserLogin(request)) {
+	public String managePage(HttpServletRequest request, HttpSession session) {
+		User me = checkCookie(request, session);
+		System.out.println(me);
+		if(me != null) {
 			ApplicationContext context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
 			ProductDAO productDAO = context.getBean("ProductJDBCTemplate", ProductJDBCTemplate.class);
-			ArrayList<Product> products = productDAO.getByUserId(userId);
+			ArrayList<Product> products = productDAO.getByUserId(me.getId());
 			session.setAttribute("products", products);
 			return "manage";
 		} else {
@@ -77,8 +75,12 @@ public class PageController {
 
 	@RequestMapping(value = "/addProductPage", method=RequestMethod.GET)
 	public String addProductPage(HttpServletRequest request, HttpSession session) {
-		checkCookie(request, session);
-		return "addProduct";
+		User u = checkCookie(request, session);
+		if(u != null) {
+			return "addProduct";
+		} else {
+			return "index";
+		}
 	}
 	
 	@RequestMapping(value = "/detail", method=RequestMethod.GET)
@@ -100,13 +102,16 @@ public class PageController {
 	}
 	
 	
-	private void checkCookie(HttpServletRequest request, HttpSession session) {
+	private User checkCookie(HttpServletRequest request, HttpSession session) {
 		String id = CookieTools.getCookieId(request);
 		if(id != null) {
 			ApplicationContext context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
 			UserDAO userDAO = context.getBean("UserJDBCTemplate", UserJDBCTemplate.class);
-			session.setAttribute("me", userDAO.getUserById(id));
+			User u = userDAO.getUserById(id);
+			session.setAttribute("me", u);
+			return u;
 		} 
+		return null;
 	}
 	
 	private boolean IsUserLogin(HttpServletRequest request) {

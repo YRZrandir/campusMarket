@@ -50,8 +50,11 @@ public interface UserDAO {
 	 * @return
 	 * Return newly updated user
 	 */
-	public User updateUser(String id, String name, String password, String gender,
+	public boolean updateUser(String id, String name, String password, String gender,
 			String school, String campus, String iconPath, String telephone);
+	
+	public boolean updateUserKeepImage(String id, String name, String password, String gender, 
+			String school, String campus, String telephone);
 	
 	public User getUserById(String id);
 }

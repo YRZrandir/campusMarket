@@ -54,64 +54,75 @@
             <ul class="layui-tab-title">
                 <li class="layui-this">个人资料</li>
                 <li>商品管理</li>
-                <li></li>
             </ul>
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
 	                <form id="updateForm" class="layui-form" action="">
 		                <div class="layui-form-item">
 							<div class="layui-input-block"  style="margin: 10px">
-								<label  class="layui-form-label"><%=me.getId() %></label>
+								<label  class="layui-form-label">账号</label>
 								<input placeholder="userid" type="text" readonly name="id"
-								 lay-verify="required" autocomplete="off" class="layui-input">
+								 lay-verify="required" autocomplete="off" class="layui-input" value=<%=me.getId() %>>
 							</div>
 		
 							<div class="layui-input-block"  style="margin: 10px">
-								<label class="layui-form-label"><%=me.getName() %></label>
+								<label class="layui-form-label">姓名</label>
 								<input placeholder="name" type="text" name="name" 
-								value="" lay-verify="required" autocomplete="off" class="layui-input">
+								lay-verify="required" autocomplete="off" class="layui-input" 
+								value=<%=String.format("\"%s\"", me.getName()) %>>
 							</div>
 		
 							<div class="layui-input-block"  style="margin: 10px">
-								<label class="layui-form-label"><%=me.getPassword() %></label>
+								<label class="layui-form-label">密码</label>
 								<input placeholder="password" type="password" name="password" 
-								lay-verify="required" autocomplete="off" class="layui-input">
+								lay-verify="required" autocomplete="off" class="layui-input" value=<%=me.getPassword() %>>
 							</div>
 		
 							<div class="layui-input-block"  style="margin: 10px">
-								<label class="layui-form-label"><%=me.getGender() %></label>
+								<label class="layui-form-label">性别</label>
 								<div class="layui-form">
 									<select name="gender" id="gender" lay-filter="myselect">
-										<option value="female">女</option>
-										<option value="male">男</option>
+										<%
+											String gender = me.getGender();
+											if(gender.equals("male")) {
+												out.println("<option value=male>男</option>");
+												out.println("<option value=female>女</option>");
+											} else {
+												out.println("<option value=female>女</option>");
+												out.println("<option value=male>男</option>");
+											}
+										%>
 									</select>
 								</div>
 							</div>
 		
 							<div class="layui-input-block"  style="margin: 10px">
-								<label class="layui-form-label"><%=me.getSchool() %></label>
+								<label class="layui-form-label">学校</label>
 								<input placeholder="school" type="text" name="school" 
-								lay-verify="required" autocomplete="off" class="layui-input">
+								lay-verify="required" autocomplete="off" class="layui-input" 
+								value=<%=String.format("\"%s\"", me.getSchool()) %>>
 							</div>
 		
 							<div class="layui-input-block"  style="margin: 10px">
-								<label class="layui-form-label" ><%=me.getCampus() %></label>
+								<label class="layui-form-label" >校区</label>
 								<input type="text" placeholder="campus" name="campus" 
-								value="" lay-verify="required" autocomplete="off" class="layui-input">
+								lay-verify="required" autocomplete="off" class="layui-input" 
+								value=<%=String.format("\"%s\"", me.getCampus()) %>>
 							</div>
 		
 							<div class="layui-input-block" style="margin: 10px">
-								<label class="layui-form-label"><%=me.getTelephone() %></label>
+								<label class="layui-form-label">电话</label>
 								<input type="text" placeholder="telephone" name="telephone" 
-								value="" lay-verify="required" autocomplete="off" class="layui-input">
+								lay-verify="required" autocomplete="off" class="layui-input" 
+								value=<%=me.getTelephone() %>>
 							</div>
-							<div class="image">
-								<img src=<%out.print("Image/" + me.getIconPath()); %> style="width:280px">
+							<div class="image" align="left">
+								<img src=<%=String.format("\"Image/%s\"", me.getIconPath()) %> style="width:400px">
 							</div>
 		
 							<div class="layui-input-block" style="margin: 10px">
 								<label class="layui-form-label">头像</label>
-								<input type="file" name="file" lay-verify="required" autocomplete="off" class="layui-input">
+								<input type="file" name="file" autocomplete="off" class="layui-input">
 							</div>
 						</div>
 						<div class="layui-form-item"  align="left">
@@ -122,6 +133,26 @@
 				</div>
                 
                 <div class="layui-tab-item">
+                	 <div class="layui-container">
+                        <div class="layui-row">
+                            <div class="layui-col-md3">
+                                <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                                    <li class="layui-nav-item layui-nav-itemed">
+                                        <a href="manage.html">我的商品</a>
+                                    </li>
+                                    <li class="layui-nav-item">
+                                        <a href="addProductPage">商品上新</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="layui-col-md9">
+                                <div class="content content-nav-base commodity-content">
+
+                                    <div class="commod-cont-wrap">
+                                        <div class="commod-cont w1200 layui-clear">
+                                            <div class="cont-wrap">
+                                                <div class="right-cont" >
+                                                    <div class="cont-list layui-clear" id="list-cont">
 					<%
 						for(Product product : products) {
 							String url = "detail?id=" + product.getId();
@@ -154,10 +185,18 @@
 									      
 					    			+"</div>");
 						}
-						
-					%>
+					%>                                                        
+                                                    </div>
+                                                    <div id="demo0" style="text-align: center;"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 				</div>
-
             </div>
         </div>
     </div>
@@ -175,6 +214,7 @@
 				contentType:false,
 				success: function(ret) {
 					if(ret != "fail") {
+						alert("更新成功！");
 						window.location.href = "managePage";
 					} else {
 						alert("更新失败");

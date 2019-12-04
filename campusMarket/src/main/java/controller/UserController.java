@@ -115,18 +115,25 @@ public class UserController {
 		try {
 			request.setCharacterEncoding("UTF-8");
 			response.setCharacterEncoding("UTF-8");
-			String iconPath = "";
-			if(file != null) {
-				String path = request.getServletContext().getRealPath("/Image/");
-				iconPath = id + "_" + file.getOriginalFilename();
-				ImageTools.saveImage(file, iconPath, path);
-			}
-
 			context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
 			UserDAO userDAO = context.getBean("UserJDBCTemplate", UserJDBCTemplate.class);
 			
-			User newUser = userDAO.updateUser(id, name, password, gender, school, campus, iconPath, telephone);
-			HttpTools.writeObject(response, newUser);
+			boolean ret;
+			if(file != null && !file.isEmpty()) {
+				String iconPath = "";
+				String path = request.getServletContext().getRealPath("/Image/");
+				iconPath = id + "_" + file.getOriginalFilename();
+				ImageTools.saveImage(file, iconPath, path);
+				ret = userDAO.updateUser(id, name, password, gender, school, campus, iconPath, telephone);
+			} else {
+				ret = userDAO.updateUserKeepImage(id, name, password, gender, school, campus, telephone);
+			}
+			
+			if (ret) {
+				HttpTools.writeJSON(response, "success");
+			} else {
+				HttpTools.writeJSON(response, "fail");
+			}
 		} catch(IOException e) {
 			e.printStackTrace();
 			HttpTools.writeJSON(response, "fail");

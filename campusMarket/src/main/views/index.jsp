@@ -18,12 +18,13 @@
         <a href="index">首页</a>
       </p>
       <div class="sn-quick-menu">
-      <%!User me; %>
+      <%!User me;String iconPath; %>
       <%
       		me = (User)session.getAttribute("me");
       		if(me != null){
-      			String url = "managePage?userId=" + me.getId();
-      			out.println("<div class=\"login\"><a href=\"" + url + "\">我的小拍</a></div>");
+      			iconPath = "Image/" + me.getIconPath();
+      			out.println(String.format("<div class=\"login\"><a href=\"managePage\"><img src=\"%s\">%s</a></div>",
+      					iconPath, me.getName()));
       		} else {
       			out.println("<div class=\"login\"><a href=\"loginPage\">登录</a></div>" 
       	      			 + "<div class=\"login\"><a href=\"registerPage\">注册</a></div>");
