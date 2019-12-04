@@ -30,7 +30,7 @@ public class PageController {
 
 	@RequestMapping(value = "/index", method=RequestMethod.GET)
 	public String indexPage(HttpServletRequest request, HttpSession session) {
-		checkCookie(request, session);
+		checkCookie(request);
 		return "index";
 	}
 
@@ -41,12 +41,12 @@ public class PageController {
 
 	@RequestMapping(value = "/managePage", method=RequestMethod.GET)
 	public String managePage(HttpServletRequest request, HttpSession session) {
-		User me = checkCookie(request, session);
+		User me = checkCookie(request);
 		if(me != null) {
 			ApplicationContext context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
 			ProductDAO productDAO = context.getBean("ProductJDBCTemplate", ProductJDBCTemplate.class);
 			ArrayList<Product> products = productDAO.getByUserId(me.getId());
-			session.setAttribute("products", products);
+			request.setAttribute("products", products);
 			return "manage";
 		} else {
 			return "index";
@@ -55,7 +55,7 @@ public class PageController {
 
 	@RequestMapping(value = "/aboutPage", method=RequestMethod.GET)
 	public String aboutPage(HttpServletRequest request, HttpSession session) {
-		checkCookie(request, session);
+		checkCookie(request);
 		return "about";
 	}
 
@@ -64,17 +64,17 @@ public class PageController {
 			@RequestParam(name="keyword", required=true) String keyword,
 			HttpServletRequest 	request,
 			HttpSession 		session) {
-		checkCookie(request, session);
+		checkCookie(request);
 		ApplicationContext context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
 		ProductDAO productDAO = context.getBean("ProductJDBCTemplate", ProductJDBCTemplate.class);
 		ArrayList<Product> results = productDAO.searchProduct(keyword.split(" "));
-		session.setAttribute("product", results);
+		request.setAttribute("product", results);
 		return "commodity";
 	}
 
 	@RequestMapping(value = "/addProductPage", method=RequestMethod.GET)
 	public String addProductPage(HttpServletRequest request, HttpSession session) {
-		User u = checkCookie(request, session);
+		User u = checkCookie(request);
 		if(u != null) {
 			return "addProduct";
 		} else {
@@ -87,7 +87,7 @@ public class PageController {
 			@RequestParam(name="id", required=true) String id,
 			HttpServletRequest 	request,
 			HttpSession 		session) {
-		checkCookie(request, session);
+		checkCookie(request);
 		ApplicationContext context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
 		UserDAO userDAO = context.getBean("UserJDBCTemplate", UserJDBCTemplate.class);
 		ProductDAO productDAO = context.getBean("ProductJDBCTemplate", ProductJDBCTemplate.class);
@@ -95,25 +95,26 @@ public class PageController {
 		String userId = product.getUserId();
 		User user = userDAO.getUserById(userId);
 		
-		session.setAttribute("product", product);
-		session.setAttribute("user", user);
+		request.setAttribute("product", product);
+		request.setAttribute("user", user);
 		return "details";
 	}
 	
 	
-	private User checkCookie(HttpServletRequest request, HttpSession session) {
+	private User checkCookie(HttpServletRequest request) {
 		String id = CookieTools.getCookieId(request);
-		if(id != null) {
+		if(id != null && !id.isEmpty()) {
 			ApplicationContext context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
 			UserDAO userDAO = context.getBean("UserJDBCTemplate", UserJDBCTemplate.class);
 			User u = userDAO.getUserById(id);
-			session.setAttribute("me", u);
+			request.setAttribute("me", u);
 			return u;
 		} 
 		return null;
 	}
 	
 	private boolean IsUserLogin(HttpServletRequest request) {
-		return CookieTools.getCookieId(request) != null;
+		String id = CookieTools.getCookieId(request);
+		return id != null && !id.isEmpty();
 	}
 }

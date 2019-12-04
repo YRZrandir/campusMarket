@@ -33,5 +33,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="D:/mysql-connector-java-8.0.16.jar"/>
 	<classpathentry kind="lib" path="D:/apache-maven-repo/org/springframework/spring-test/5.2.1.RELEASE/spring-test-5.2.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/ansj_seg-5.1.6.jar"/>
+	<classpathentry kind="lib" path="D:/nlp-lang-1.7.8.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

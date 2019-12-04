@@ -139,4 +139,10 @@ public class UserController {
 			HttpTools.writeJSON(response, "fail");
 		}
 	}
+	
+	@RequestMapping(value="logout")
+	public String logOut(@RequestParam("id")String id, HttpServletRequest request, HttpServletResponse response) {
+		CookieTools.deleteCookie(response, "id", id);
+		return "index";
+	}
 }

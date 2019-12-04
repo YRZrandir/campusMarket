@@ -77,7 +77,8 @@ public class ProductController {
 		response.setCharacterEncoding("UTF-8");
 		context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
 		ProductDAO productDAO = context.getBean("ProductJDBCTemplate", ProductJDBCTemplate.class);
-		ArrayList<Product> results = productDAO.searchProduct(keyword.split(" "));
+		String[] keywords = StringTools.Cut(keyword);
+		ArrayList<Product> results = productDAO.searchProduct(keywords);
 		if(results != null) {
 			HttpTools.writeObject(response, results);
 		} else {

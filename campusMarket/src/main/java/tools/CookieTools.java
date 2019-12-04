@@ -36,6 +36,18 @@ public class CookieTools {
 		try {
 			Cookie cookie = new Cookie(name, URLEncoder.encode(value, "UTF-8"));
 			cookie.setMaxAge(24 * 60 * 60); //24hours
+			cookie.setPath("/");
+			response.addCookie(cookie);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void deleteCookie(HttpServletResponse response, String name, String value) {
+		try {
+			Cookie cookie = new Cookie(name, URLEncoder.encode(value, "UTF-8"));
+			cookie.setMaxAge(0); //24hours
 			response.addCookie(cookie);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block

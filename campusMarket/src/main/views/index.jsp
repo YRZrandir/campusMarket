@@ -20,11 +20,12 @@
       <div class="sn-quick-menu">
       <%!User me;String iconPath; %>
       <%
-      		me = (User)session.getAttribute("me");
+      		me = (User)request.getAttribute("me");
       		if(me != null){
       			iconPath = "Image/" + me.getIconPath();
       			out.println(String.format("<div class=\"login\"><a href=\"managePage\"><img src=\"%s\">%s</a></div>",
       					iconPath, me.getName()));
+      			out.println(String.format("<a><button id='exit'>注销</button></a>"));
       		} else {
       			out.println("<div class=\"login\"><a href=\"loginPage\">登录</a></div>" 
       	      			 + "<div class=\"login\"><a href=\"registerPage\">注册</a></div>");
@@ -33,8 +34,12 @@
       </div>
     </div>
   </div>
-
-
+  <script>
+  document.getElementById("exit").onclick = function() {
+	  document.cookie = "id=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+	  window.location.href = "index";
+  }
+  </script>
   <div class="header">
     <div class="headerLayout w1200">
       <div class="headerCon">

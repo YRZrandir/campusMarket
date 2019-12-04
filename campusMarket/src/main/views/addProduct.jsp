@@ -44,7 +44,7 @@ import="java.util.*,java.net.*,model.product.Product,model.user.User"
 <body>
 <%!User me;%>
 <%
-	me = (User)session.getAttribute("me");
+	me = (User)request.getAttribute("me");
 %>
     <div class="header" >
         <div class="headerLayout w1200">

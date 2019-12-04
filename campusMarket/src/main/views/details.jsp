@@ -22,7 +22,7 @@
       <div class="sn-quick-menu">
       <%! int code=0; %>
       <%
-      		if(session.getAttribute("me")!=null)
+      		if(request.getAttribute("me")!=null)
       		{
       			out.println("<div class=\"login\"><a href=\"managePage\">我的小拍</a></div>");
       			code=1;
@@ -74,8 +74,8 @@
     </div>
     <%! String name,price,description,phone = null;String[] iconPath;%>
     <%	
-    	Product p = (Product)session.getAttribute("product");
-    	User u = (User)session.getAttribute("user");
+    	Product p = (Product)request.getAttribute("product");
+    	User u = (User)request.getAttribute("user");
     	name = p.getName();
     	price = p.getPrice();
     	phone = u.getTelephone();

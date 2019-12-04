@@ -25,7 +25,7 @@
       </p>
       <div class="sn-quick-menu">
       <%
-      		if(session.getAttribute("me")!=null)
+      		if(request.getAttribute("me")!=null)
       			out.println("<div class=\"login\"><a href=\"managePage\">我的小拍</a></div>");
       		else
       			out.println("<div class=\"login\"><a href=\"loginPage\">登录</a></div>" 
@@ -97,7 +97,7 @@
 <%! int pn=0;%>
 <%
 	
-	ArrayList<Product> p = (ArrayList<Product>)session.getAttribute("product");
+	ArrayList<Product> p = (ArrayList<Product>)request.getAttribute("product");
 	pn=p.size();
 	for(int i=0;i<p.size();i++)
 	{

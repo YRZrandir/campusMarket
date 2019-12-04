@@ -16,8 +16,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <%!ArrayList<Product> products;User me;String iconPath;%>
     <%
-    	products = (ArrayList<Product>)session.getAttribute("products");
-    	me = (User)session.getAttribute("me");
+    	products = (ArrayList<Product>)request.getAttribute("products");
+    	me = (User)request.getAttribute("me");
     	iconPath = me.getIconPath();
     	if(iconPath == null || iconPath.isEmpty()) {
     		iconPath = "Image/default.jpg";
