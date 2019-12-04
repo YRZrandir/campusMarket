@@ -6,7 +6,6 @@ import org.ansj.splitWord.analysis.ToAnalysis;
 
 import java.util.*;
 
-import java.util.*;
 public class StringTools {
 	public static String[] Cut(String str)
 	{
@@ -17,7 +16,8 @@ public class StringTools {
 		for(int i=0;i<t.size();i++)
 		{
 			strs[i]=t.get(i).getName();
-		}
+			System.out.println(strs[i] + " ");
+			}
 		return strs;
 	}
 }

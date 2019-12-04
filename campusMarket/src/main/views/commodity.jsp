@@ -66,7 +66,7 @@
       <div class="inner-cont0">
         <div class="inner-cont1 w1200">
           <div class="inner-cont2">
-            <a href="commodityPage" class="active">所有商品</a>
+            <a href="commodityPage?keyword=" class="active">所有商品</a>
             <a href="http://www.sc.sdu.edu.cn/">校园资讯</a>
             <a href="aboutPage">关于我们</a>
           </div>

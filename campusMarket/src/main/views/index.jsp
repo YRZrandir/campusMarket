@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <%@ page language="java" import="java.util.*, model.user.User" pageEncoding="UTF-8"%>
+  <%@ page language="java" import="java.util.*, model.user.User, model.product.Product" pageEncoding="UTF-8"%>
   <meta charset="UTF-8">
   <title>校园小拍</title>
   <link rel="stylesheet" type="text/css" href="res/static/css/main.css">
@@ -10,6 +10,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
 </head>
+<%!User me;String iconPath;ArrayList<Product> products; %>
+<%
+	me = (User)request.getAttribute("me");
+	products = (ArrayList<Product>)request.getAttribute("products");
+%>
 <body id="list-cont">
   <div class="site-nav-bg">
     <div class="site-nav w1200">
@@ -18,19 +23,22 @@
         <a href="index">首页</a>
       </p>
       <div class="sn-quick-menu">
-      <%!User me;String iconPath; %>
+      	<div class="layui-container">
+                <div class=" layui-layout-right">
       <%
       		me = (User)request.getAttribute("me");
       		if(me != null){
       			iconPath = "Image/" + me.getIconPath();
-      			out.println(String.format("<div class=\"login\"><a href=\"managePage\"><img src=\"%s\">%s</a></div>",
+      			out.println(String.format("<div class=\"login\"><a href=\"managePage\"><img class='layui-nav-img' src=\"%s\">%s</a></div>",
       					iconPath, me.getName()));
-      			out.println(String.format("<a><button id='exit'>注销</button></a>"));
+      			out.println(String.format("<div class='login'><a href='#' id='exit'>注销</a></div>"));
       		} else {
       			out.println("<div class=\"login\"><a href=\"loginPage\">登录</a></div>" 
       	      			 + "<div class=\"login\"><a href=\"registerPage\">注册</a></div>");
       		}
       %>
+      		</div>
+      	</div>
       </div>
     </div>
   </div>
@@ -68,7 +76,7 @@
       <div class="inner-cont0">
         <div class="inner-cont1 w1200">
           <div class="inner-cont2">
-            <a href="commodityPage" >所有商品</a>
+            <a href="commodityPage?keyword=" >所有商品</a>
             <a href="http://www.sc.sdu.edu.cn/">校园资讯</a>
             <a href="aboutPage">关于我们</a>
           </div>
@@ -102,72 +110,55 @@
             <div class="layui-carousel" id="test1">
               <div carousel-item>
                 <div class="item-box">
-                  <div class="item">
-                    <a href="javascript:;"><img src="res/static/img/s_img2.jpg"></a>
-                    <div class="title">宝宝五彩袜棉质舒服</div>
-                    <div class="price">
-                      <span>￥49.00</span>
-                      <del>￥99.00</del>
-                    </div>
-                  </div>
-                  <div class="item">
-                    <a href="javascript:;"><img src="res/static/img/s_img3.jpg"></a>
-                    <div class="title">宝宝五彩袜棉质舒服</div>
-                    <div class="price">
-                      <span>￥49.00</span>
-                      <del>￥99.00</del>
-                    </div>
-                  </div>
-                  <div class="item">
-                    <a href="javascript:;"><img src="res/static/img/s_img4.jpg"></a>
-                    <div class="title">宝宝五彩袜棉质舒服</div>
-                    <div class="price">
-                      <span>￥49.00</span>
-                      <del>￥99.00</del>
-                    </div>
-                  </div>
-                  <div class="item">
-                    <a href="javascript:;"><img src="res/static/img/s_img5.jpg"></a>
-                    <div class="title">宝宝五彩袜棉质舒服</div>
-                    <div class="price">
-                      <span>￥49.00</span>
-                      <del>￥99.00</del>
-                    </div>
-                  </div>
+					<%
+						int size = products.size();
+						for(int i = 0;i < size && i < 4;i++) {
+							Product product = products.get(0);
+							String href = "/detail?id=" + product.getId();
+							String iconPath = "ProductImage/" + product.getIconPath();
+							if(iconPath != null && !iconPath.isEmpty()) {
+								String[] paths = iconPath.split("#");
+								iconPath = "ProductImage/" + paths[1];
+							} else {
+								iconPath = "ProductImage/default.jpg";
+							}
+							String name = product.getName();
+							String price = product.getPrice();
+							String html = String.format(
+									"<div class='item'>" + 
+									"<a href='%s'><img src='%s'></a>" + 
+									"<div class='title'>%s</div>" + 
+									"<div class='price'>" + 
+									"<span>￥%s</span>" + 
+									"</div></div>",
+									href, iconPath, name, price);
+							out.println(html);
+							products.remove(0);
+						}
+					%>
                 </div>
                 <div class="item-box">
-                  <div class="item">
-                    <a href="javascript:;"><img src="res/static/img/s_img2.jpg"></a>
-                    <div class="title">宝宝五彩袜棉质舒服</div>
-                    <div class="price">
-                      <span>￥49.00</span>
-                      <del>￥99.00</del>
-                    </div>
-                  </div>
-                  <div class="item">
-                    <a href="javascript:;"><img src="res/static/img/s_img3.jpg"></a>
-                    <div class="title">宝宝五彩袜棉质舒服</div>
-                    <div class="price">
-                      <span>￥49.00</span>
-                      <del>￥99.00</del>
-                    </div>
-                  </div>
-                  <div class="item">
-                    <a href="javascript:;"><img src="res/static/img/s_img4.jpg"></a>
-                    <div class="title">宝宝五彩袜棉质舒服</div>
-                    <div class="price">
-                      <span>￥49.00</span>
-                      <del>￥99.00</del>
-                    </div>
-                  </div>
-                  <div class="item">
-                    <a href="javascript:;"><img src="res/static/img/s_img5.jpg"></a>
-                    <div class="title">宝宝五彩袜棉质舒服</div>
-                    <div class="price">
-                      <span>￥49.00</span>
-                      <del>￥99.00</del>
-                    </div>
-                  </div>
+                  	<%
+						size = products.size();
+						for(int i = 0;i < size && i < 4;i++) {
+							Product product = products.get(0);
+							String href = "/detail?id=" + product.getId();
+							String iconPath = "ProductImage/" + product.getIconPath();
+							String name = product.getName();
+							String price = product.getPrice();
+							String html = String.format(
+									"<div class='item'>" + 
+									"<a href='%s'><img src='%s'></a>" + 
+									"<div class='title'>%s</div>" + 
+									"<div class='price'>" + 
+									"<span>￥%s</span>" + 
+									"</div></div>",
+									href, iconPath, name, price);
+							out.println(html);
+							products.remove(0);
+						}
+					%>
+
                 </div>
               </div>
             </div>
@@ -175,53 +166,19 @@
         </div>    
       </div>
     </div>
-
-
-
-    <div class="product-list-box" id="product-list-box">
-      <div class="product-list-cont w1200">
-        <h4>更多推荐</h4>
-        <div class="product-item-box layui-clear">
-
-          <div class="list-item">
-            <a href="javascript:;"><img src="res/static/img/more3.jpg"></a>
-            <p>时尚宝宝小黄鸭T恤纯棉耐脏多色可选0-2岁宝宝</p>
-            <span>￥100.00</span>
-          </div>
-          <div class="list-item">
-            <a href="javascript:;"><img src="res/static/img/more1.jpg"></a>
-            <p>时尚宝宝小黄鸭T恤纯棉耐脏多色可选0-2岁宝宝</p>
-            <span>￥100.00</span>
-          </div>
-          <div class="list-item">
-            <a href="javascript:;"><img src="res/static/img/more3.jpg"></a>
-            <p>时尚宝宝小黄鸭T恤纯棉耐脏多色可选0-2岁宝宝</p>
-            <span>￥100.00</span>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 
   <div class="footer">
     <div class="ng-promise-box">
       <div class="ng-promise w1200">
-
       </div>
     </div>
     <div class="mod_help w1200">
       <p>
         <a href="javascript:;">关于我们</a>
         <span>|</span>
-        <a href="javascript:;">帮助中心</a>
-        <span>|</span>
-        <a href="javascript:;">售后服务</a>
-        <span>|</span>
         <a href="javascript:;">校园资讯</a>
-        <span>|</span>
-        <a href="javascript:;">关于货源</a>
       </p>
-      <p class="coty">校园小拍版权所有 &copy; 2012-2020</p>
     </div>
   </div>
   <script type="text/javascript">

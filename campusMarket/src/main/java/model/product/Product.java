@@ -3,6 +3,8 @@
  */
 package model.product;
 
+import java.util.Arrays;
+
 /**
  * @author Mithrandir
  *
@@ -18,8 +20,9 @@ public class Product {
 	private String status;
 	private String directory;
 	
+	public static final String[] DIRS = {"食品", "电子", "书籍", "服装", "其他"};
+	
 	public Product() {
-
 	}
 	public Product(String id, String name, String userId, String price, String time, String description,
 			String iconPath, String status, String directory) {

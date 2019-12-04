@@ -92,8 +92,11 @@ import="java.util.*,java.net.*,model.product.Product,model.user.User"
                         <div class="layui-input-block" style="margin-left: 10px">
                             <label class="layui-form-label-col">类别</label>
                             <select name="directory">
-                                <option value="食品">食品</option>
-                                <option value="电子">电子</option>
+									<%
+										for(String dir: Product.DIRS) {
+											out.println(String.format("<option value='%s'>%s</option>", dir, dir));
+										}
+									%>
                             </select>
                         </div>
 

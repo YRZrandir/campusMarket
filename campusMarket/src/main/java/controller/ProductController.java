@@ -109,23 +109,37 @@ public class ProductController {
 		
 		context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
 		ProductDAO productDAO = context.getBean("ProductJDBCTemplate", ProductJDBCTemplate.class);
-		if(files != null && files.length > 0)
-		{
+		boolean ret = false;
+		
+		boolean haveImage = false;
+		if(files != null && files.length > 0) {
+			for(MultipartFile file: files) {
+				if(!file.isEmpty()) {
+					haveImage = true;
+				}
+			}
+		}
+		if(haveImage) {
 			String imgPath = request.getServletContext().getRealPath("/ProductImage/");
 			String iconPath = "";
 			int count = 1;
 			for(MultipartFile file : files) {
-				String temp = ImageTools.saveImage(file, name + "_" + time + "_" + count + file.getOriginalFilename(), imgPath);
-				iconPath += "#" + temp;
+				String fileName = name + "_" + time.replace(" ", "").replace(",", "").replace(":", "") + 
+						"_" + count + file.getOriginalFilename();
+				ImageTools.saveImage(file, fileName, imgPath);
+				iconPath += "#" + fileName;
 				count++;
 				//#Path1#Path2#Path3...
 			}
-			Product newProduct = productDAO.updateProduct(id, name, userId, price, time, description, iconPath, directory);
-			if(newProduct != null) {
-				HttpTools.writeObject(response, newProduct);
-			} else {
-				HttpTools.writeJSON(response, "fail");
-			}
+			ret = productDAO.updateProduct(id, name, price, time, description, iconPath, directory);
+		} else {
+			ret = productDAO.updateProductKeepImage(id, name, price, time, description, directory);
+		}
+		
+		if(ret) {
+			HttpTools.writeJSON(response, "success");
+		} else {
+			HttpTools.writeJSON(response, "fail");
 		}
 	}
 }

@@ -40,8 +40,11 @@ public interface ProductDAO {
 	 * @return
 	 * Return newly updated product
 	 */
-	public Product updateProduct(String id, String name, String userId, String price,
+	public boolean updateProduct(String id, String name, String price,
 			String time, String description, String iconPath, String directory);
+	
+	public boolean updateProductKeepImage(String id, String name, String price,
+			String time, String description, String directory);
 	
 	/**
 	 * Search by product name and position (school&campus);

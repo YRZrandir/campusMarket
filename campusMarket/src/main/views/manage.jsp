@@ -155,7 +155,7 @@
                                                     <div class="cont-list layui-clear" id="list-cont">
 					<%
 						for(Product product : products) {
-							String url = "detail?id=" + product.getId();
+							String url = "updateProductPage?id=" + product.getId();
 							String iconPath = product.getIconPath();
 							if(!iconPath.isEmpty()) {
 								iconPath = iconPath.split("#")[1];

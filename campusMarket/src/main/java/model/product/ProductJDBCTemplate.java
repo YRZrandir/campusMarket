@@ -77,7 +77,7 @@ public class ProductJDBCTemplate implements ProductDAO {
 	@Override
 	public boolean deleteProduct(String id) {
 		// TODO Auto-generated method stub
-		String sql="delete from Product where pid = "+id;
+		String sql="delete from Product where id = "+id;
 
 	    int count=jdbcTemplateObject.update(sql);
 	    if(count!=0) {
@@ -88,36 +88,48 @@ public class ProductJDBCTemplate implements ProductDAO {
 	}
 
 	@Override
-	public Product updateProduct(String id, String name, String userId, String price, String time, String description,
+	public boolean updateProduct(String id, String name, String price, String time, String description,
 			String iconPath, String directory) {
 		// TODO Auto-generated method stub
-		String sql="update Product set (pname,uid,price,time,description,iconPath) = (?,?,?,?,?,?) where pid="+id;
+		String sql = String.format("update Product set "
+				+ "name='%s', price='%s', time='%s', description='%s', directory='%s', iconPath='%s' "
+				+ "where id='%s'",name, price, time, description, directory, iconPath, id);
 
-		jdbcTemplateObject.update(new PreparedStatementCreator() {
-
+		int ret = jdbcTemplateObject.update(new PreparedStatementCreator() {
 			@Override
 			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
 				// TODO Auto-generated method stub
 				PreparedStatement pst=con.prepareStatement(sql);
-				pst.setString(1, name);
-				pst.setString(2, userId);
-				pst.setString(3, price);
-				pst.setString(4, time);
-				pst.setString(5, description);
-				pst.setString(6, iconPath);
 				return pst;
 			}
-			
+		});
+		if(ret == 1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	@Override
+	public boolean updateProductKeepImage(String id, String name, String price,
+			String time, String description, String directory) {
+		String sql = String.format("update Product set "
+				+ "name='%s', price='%s', time='%s', description='%s', directory='%s' "
+				+ "where id='%s'",name, price, time, description, directory, id);
+
+		int ret = jdbcTemplateObject.update(new PreparedStatementCreator() {
+			@Override
+			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+				// TODO Auto-generated method stub
+				PreparedStatement pst=con.prepareStatement(sql);
+				return pst;
+			}
 		});		
-		Product p=new Product();
-		p.setDescription(description);
-		p.setIconPath(iconPath);
-		p.setName(name);
-		p.setTime(time);
-		p.setUserId(userId);
-		p.setId(id);
-		p.setPrice(price);
-		return p;
+		if(ret == 1) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
@@ -166,7 +178,6 @@ public class ProductJDBCTemplate implements ProductDAO {
 		String sql="select * from Product where id ='" + id + "'";
 		
 		 ArrayList<Product> list = (ArrayList<Product>) jdbcTemplateObject.query(sql, new RowMapper<Product>() {
-
 				@Override
 				public Product mapRow(ResultSet rs, int rowNum) throws SQLException {
 					// TODO Auto-generated method stub
@@ -175,13 +186,12 @@ public class ProductJDBCTemplate implements ProductDAO {
 					p.setIconPath(rs.getString("iconPath"));
 					p.setName(rs.getString("name"));
 					p.setTime(rs.getString("time"));
-					p.setUserId(rs.getString("userid"));
+					p.setUserId(rs.getString("userId"));
 					p.setId(rs.getString("id"));
 					p.setPrice(rs.getString("price"));
 					p.setDirectory(rs.getString("directory"));
 					return p;
 				}
-				
 				});
 		 if(list == null || list.isEmpty()) {
 			 return null;
@@ -193,7 +203,7 @@ public class ProductJDBCTemplate implements ProductDAO {
 	
 	public ArrayList<Product> searchByDirectory(String directory) {
 		// TODO Auto-generated method stub
-		String sql="select * from Product where directory ='"+directory+"'";
+		String sql="select * from Product where status='normal' and directory ='"+directory+"'";
 
 		
 		 ArrayList<Product> list = (ArrayList<Product>) jdbcTemplateObject.query(sql, new RowMapper<Product>() {
@@ -220,7 +230,7 @@ public class ProductJDBCTemplate implements ProductDAO {
 	
 	public ArrayList<Product> getAll() {
 		// TODO Auto-generated method stub
-		String sql="select * from Product";
+		String sql="select * from Product where status='normal' order by time desc";
 
 		 ArrayList<Product> list = (ArrayList<Product>) jdbcTemplateObject.query(sql, new RowMapper<Product>() {
 
@@ -244,7 +254,7 @@ public class ProductJDBCTemplate implements ProductDAO {
 	}
 
 	public ArrayList<Product> getByUserId(String userId) {
-		String sql="select * from Product where userId ='" + userId + "'";
+		String sql="select * from Product where status='normal' and userId ='" + userId + "'";
 		
 		 ArrayList<Product> list = (ArrayList<Product>) jdbcTemplateObject.query(sql, new RowMapper<Product>() {
 

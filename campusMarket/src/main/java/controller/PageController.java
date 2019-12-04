@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import model.product.*;
 import model.user.*;
 import tools.CookieTools;
+import tools.StringTools;
 
 @Controller
 public class PageController {
@@ -29,8 +30,20 @@ public class PageController {
 	}
 
 	@RequestMapping(value = "/index", method=RequestMethod.GET)
-	public String indexPage(HttpServletRequest request, HttpSession session) {
+	public String indexPage(HttpServletRequest request) {
 		checkCookie(request);
+		ApplicationContext context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
+		ProductDAO productDAO = context.getBean("ProductJDBCTemplate", ProductJDBCTemplate.class);
+		ArrayList<Product> products = productDAO.getAll();
+		ArrayList<Product> results = new ArrayList<Product>();
+		if(products.size() > 8) {
+			for(int i = 0;i < 8;i++) {
+				results.add(products.get(i));
+			}
+		} else {
+			results = products;
+		}
+		request.setAttribute("products", products);
 		return "index";
 	}
 
@@ -49,7 +62,7 @@ public class PageController {
 			request.setAttribute("products", products);
 			return "manage";
 		} else {
-			return "index";
+			return indexPage(request);
 		}
 	}
 
@@ -67,7 +80,8 @@ public class PageController {
 		checkCookie(request);
 		ApplicationContext context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
 		ProductDAO productDAO = context.getBean("ProductJDBCTemplate", ProductJDBCTemplate.class);
-		ArrayList<Product> results = productDAO.searchProduct(keyword.split(" "));
+		String[] keywords = StringTools.Cut(keyword);
+		ArrayList<Product> results = productDAO.searchProduct(keywords);
 		request.setAttribute("product", results);
 		return "commodity";
 	}
@@ -78,7 +92,7 @@ public class PageController {
 		if(u != null) {
 			return "addProduct";
 		} else {
-			return "index";
+			return indexPage(request);
 		}
 	}
 	
@@ -100,6 +114,24 @@ public class PageController {
 		return "details";
 	}
 	
+	@RequestMapping(value="updateProductPage", method=RequestMethod.GET)
+	public String updateProductPage(@RequestParam(name="id", required=true) String id,
+			HttpServletRequest request) {
+		if(!IsUserLogin(request)) {
+			return "index";
+		} else {
+			User me = checkCookie(request);
+			ApplicationContext context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
+			ProductDAO productDAO = context.getBean("ProductJDBCTemplate", ProductJDBCTemplate.class);
+			Product product = productDAO.getById(id);
+			if(!product.getUserId().equals(me.getId())) {
+				return indexPage(request);
+			} else {
+				request.setAttribute("product", product);
+				return "updateProduct";
+			}
+		}
+	}
 	
 	private User checkCookie(HttpServletRequest request) {
 		String id = CookieTools.getCookieId(request);
