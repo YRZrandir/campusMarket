@@ -18,28 +18,64 @@ import="java.util.*,java.net.*,model.product.Product,model.user.User"
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 
+<style>
+	.layui-input {
+		border-radius:10px;
+		font-size: 18px;
+		padding: 5px;
+		height: 50px;
+	}
+	.layui-textarea {
+		border-radius:10px;
+		font-size:15px;
+	}
+	.layui-input-block {
+		margin-top:8px;
+		margin-bottom:8px;
+	}
+	.layui-btn {
+		width: 120px;
+		height: 50px;
+		font-size: 20px;
+	}
+</style>
+
 </head>
 <body>
 <%!User me;%>
 <%
 	me = (User)session.getAttribute("me");
-	if(me != null)
-		out.println("<div class=\"login\"><a href=\"managePage\">我的小拍</a></div>");
-	else {
-		out.println("<script>window.location.href=\"index\" </script>");
-	}
 %>
+    <div class="header" >
+        <div class="headerLayout w1200">
+            <div class="headerCon">
+                <h1 class="mallLogo">
+                    <a href="index" title="校园小拍">
+                        <img src="res/static/img/logo.png">
+                    </a>
+                </h1>
+            </div>
+            <div class="layui-container">
+                <div class=" layui-layout-right">
+                    <a href="">
+                    <img src=<%=String.format("\"Image/%s\"",me.getIconPath()) %> class="layui-nav-img">
+                    <%=me.getName() %>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 <div>
-    <div class="layui-container" style="width:45%">
+    <div class="layui-container" style="width:45%;margin-top:40px;">
         <div>
             <h1 align="center" style="font-family: 华文彩云;font-size: 25px;margin-top: 10px;margin-bottom: 10px">商品上架</h1>
         </div>
-        <div class="layui-card"  style="background-color:rgba(210,210,210,0.5) ">
+        <div class="layui-card"  style="background-color:rgba(255, 255, 255, 0.7) ">
             <div class="layui-card-body">
-                <form id="addProductForm" class="layui-form"  action="">
+                <form id="addProductForm" class="layui-form">
                     <div class="layui-form-item">
                         <div class="layui-input-block" style="margin-left: 10px">
-                            <label class="layui-form-label-col" >名字</label>
+                            <label class="layui-form-label-col" >商品名称</label>
                             <input type="text" name="name" class="layui-input">
                         </div>
 
@@ -49,15 +85,15 @@ import="java.util.*,java.net.*,model.product.Product,model.user.User"
                         </div>
 
                         <div class="layui-input-block" style="margin-left: 10px">
-                            <label class="layui-form-label-col">描述</label>
+                            <label class="layui-form-label-col">商品详情</label>
                             <textarea name="description" required lay-verify="required" placeholder="请输入" class="layui-textarea"></textarea>
                         </div>
 
                         <div class="layui-input-block" style="margin-left: 10px">
                             <label class="layui-form-label-col">类别</label>
-                            <select>
-                                <option value="fruit">fruit</option>
-                                <option value="weapon">weapon</option>
+                            <select name="directory">
+                                <option value="食品">食品</option>
+                                <option value="电子">电子</option>
                             </select>
                         </div>
 
@@ -75,10 +111,10 @@ import="java.util.*,java.net.*,model.product.Product,model.user.User"
                         </div>
                     </div>
 
-                    <div class="layui-form-item" style="margin-left: 10px">
+                    <div class="layui-form-item" align="center">
                         <div class="layui-input-block" style="margin-left:0" >
                             <button  class="layui-btn"  id="addProductButton" lay-submit="" 
-                            lay-filter="demo1" onclick="return false"> 确认修改
+                            lay-filter="demo1" onclick="return false"> 上架商品
                             </button>
                         </div>
                     </div>
@@ -107,7 +143,7 @@ $("#addProductButton").click(function() {
 		contentType:false,
 		success: function(ret) {
 			alert("上架成功！")
-			window.location.href = "manage";
+			window.location.href = "managePage";
 		},
 		error: function(ret) {
 			alert("上架失败，请稍后再试");

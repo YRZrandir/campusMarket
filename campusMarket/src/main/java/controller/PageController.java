@@ -42,7 +42,6 @@ public class PageController {
 	@RequestMapping(value = "/managePage", method=RequestMethod.GET)
 	public String managePage(HttpServletRequest request, HttpSession session) {
 		User me = checkCookie(request, session);
-		System.out.println(me);
 		if(me != null) {
 			ApplicationContext context = new ClassPathXmlApplicationContext("classpath*:Beans.xml");
 			ProductDAO productDAO = context.getBean("ProductJDBCTemplate", ProductJDBCTemplate.class);
